@@ -1,0 +1,29 @@
+# Env files
+.env
+
+# WordPress content (src = wp-content)
+src/wp-content/uploads/
+src/wp-content/cache/
+src/wp-content/upgrade/
+src/wp-content/plugins/
+src/wp-content/themes/
+# Uncomment below if you want to track specific ones
+# !src/wp-content/plugins/my-plugin/
+# !src/wp-content/themes/my-theme/
+
+# Logs
+*.log
+
+# System / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.bak
+
+# Build / temp files
+node_modules/
+dist/
+.build/
+tmp/
