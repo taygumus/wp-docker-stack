@@ -2,16 +2,22 @@
 .env
 
 # WordPress content
-src/uploads/
-src/cache/
-src/upgrade/
-src/plugins/
-src/themes/
-src/languages/
+src/plugins/*
+!src/plugins/.gitkeep
+src/themes/*
+!src/themes/.gitkeep
+src/uploads/*
+!src/uploads/.gitkeep
+
+src/cache/*
+src/upgrade/*
+src/languages/*
 
 # Database dumps
-db/init/
-db/backups/
+db/init/*
+!db/init/.gitkeep
+db/backups/*
+!db/backups/.gitkeep
 
 # Logs
 *.log
