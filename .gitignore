@@ -1,15 +1,17 @@
 # Env files
 .env
 
-# WordPress content (src = wp-content)
+# WordPress content
 src/uploads/
 src/cache/
 src/upgrade/
 src/plugins/
 src/themes/
-# Uncomment below if you want to track specific ones
-# !src/plugins/my-plugin/
-# !src/themes/my-theme/
+src/languages/
+
+# Database dumps
+db/init/
+db/backups/
 
 # Logs
 *.log
