@@ -17,6 +17,7 @@ services:
       - "3306:3306"
     volumes:
       - dbdata:/var/lib/mysql
+      - ./db/init:/docker-entrypoint-initdb.d
     networks:
       - internal
   
@@ -37,6 +38,28 @@ services:
       - ./src/:/var/www/html/wp-content:rw
     networks:
       - internal
+
+  wpcli:
+    depends_on:
+      - wordpress
+      - database
+    container_name: ${CONTAINER_NAME}-wpcli
+    image: wordpress:cli
+    env_file: .env
+    environment:
+      WORDPRESS_DB_HOST: database:3306
+      WORDPRESS_DB_NAME: ${DATABASE_NAME}
+      WORDPRESS_DB_USER: ${DATABASE_USER}
+      WORDPRESS_DB_PASSWORD: ${DATABASE_PASSWORD}
+      OLD_DOMAIN: ${OLD_DOMAIN}
+      NEW_DOMAIN: ${NEW_DOMAIN}
+    volumes:
+      - wordpress:/var/www/html
+      - ./src:/var/www/html/wp-content
+      - ./scripts:/scripts
+    networks:
+      - internal
+    entrypoint: ["/scripts/init-domain-replace.sh"]
 
   nginx:
     depends_on:
