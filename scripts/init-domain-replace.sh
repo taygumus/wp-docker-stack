@@ -2,28 +2,33 @@
 set -e
 
 OLD_DOMAIN="${OLD_DOMAIN:-example.com}"
-NEW_DOMAIN="${NEW_DOMAIN:-localhost:8000}"
+NEW_DOMAIN="${SITE_URL}"
 
 DB_HOST="${WORDPRESS_DB_HOST%:*}"
 DB_PORT="${WORDPRESS_DB_HOST#*:}"
 
-echo "Starting domain replacement: $OLD_DOMAIN → $NEW_DOMAIN"
-echo "Waiting for database at ${DB_HOST}:${DB_PORT}..."
+echo "Starting WordPress domain replacement"
+echo "Old domain: ${OLD_DOMAIN}"
+echo "New domain: ${NEW_DOMAIN}"
 
+echo "Waiting for database connection at ${DB_HOST}:${DB_PORT}"
 until nc -z "$DB_HOST" "$DB_PORT"; do
-  echo "Database not ready yet..."
+  echo "Database not ready, retrying in 3 seconds"
   sleep 3
 done
 
-echo "Database port is open. Giving it a few more seconds..."
+echo "Database connection established. Waiting before running WP-CLI"
 sleep 5
 
-echo "Running WP-CLI search-replace..."
-wp search-replace "$OLD_DOMAIN" "$NEW_DOMAIN" \
+echo "Running WP-CLI search-replace command"
+if wp search-replace "$OLD_DOMAIN" "$NEW_DOMAIN" \
   --skip-columns=guid \
   --all-tables \
   --precise \
-  --allow-root \
-  || echo "Warning: WP-CLI command failed."
+  --allow-root; then
+  echo "Domain replacement completed successfully"
+else
+  echo "Warning: WP-CLI command failed or returned a non-zero exit code"
+fi
 
-echo "Domain replacement complete."
+echo "Domain replacement script finished"
