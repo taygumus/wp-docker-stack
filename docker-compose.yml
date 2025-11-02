@@ -51,15 +51,13 @@ services:
       WORDPRESS_DB_NAME: ${DATABASE_NAME}
       WORDPRESS_DB_USER: ${DATABASE_USER}
       WORDPRESS_DB_PASSWORD: ${DATABASE_PASSWORD}
-      OLD_DOMAIN: ${OLD_DOMAIN}
-      NEW_DOMAIN: ${NEW_DOMAIN}
     volumes:
       - wordpress:/var/www/html
       - ./src:/var/www/html/wp-content
       - ./scripts:/scripts
     networks:
       - internal
-    entrypoint: ["/scripts/init-domain-replace.sh"]
+    entrypoint: ["/scripts/run-wp-tasks.sh"]
 
   nginx:
     depends_on:
