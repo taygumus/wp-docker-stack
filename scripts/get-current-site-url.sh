@@ -4,7 +4,6 @@ set -e
 . /scripts/wpcli-lib.sh
 
 check_wpcli
-
 wait_for_db
 
 CURRENT_SITE_URL=$(wp option get siteurl --allow-root 2>/dev/null || true)
