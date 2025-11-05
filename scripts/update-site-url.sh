@@ -4,6 +4,7 @@ set -e
 . /scripts/wpcli-lib.sh
 
 check_required_vars "CURRENT_SITE_URL SITE_URL"
+check_wp_path
 check_wpcli
 wait_for_db
 

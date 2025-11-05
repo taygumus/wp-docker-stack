@@ -10,13 +10,27 @@ check_required_vars() {
   done
 }
 
+check_wp_path() {
+  if [ -z "$WORDPRESS_PATH" ]; then
+    echo "Error: WORDPRESS_PATH is not set"
+    exit 1
+  fi
+
+  if [ ! -d "$WORDPRESS_PATH" ]; then
+    echo "Error: WordPress path '$WORDPRESS_PATH' does not exist"
+    exit 1
+  fi
+
+  cd "$WORDPRESS_PATH"
+}
+
 check_wpcli() {
   if [ "${WPCLI_READY}" = "true" ]; then
     return 0
   fi
 
   if ! command -v wp >/dev/null 2>&1; then
-    echo "Error: WP-CLI is not installed or not in PATH."
+    echo "Error: WP-CLI is not installed or not in PATH"
     exit 1
   fi
 
