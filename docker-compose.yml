@@ -93,7 +93,7 @@ services:
       - "${PHPMYADMIN_PORT:-8001}:80"
     networks:
       - internal
-
+ 
 volumes:
   dbdata:
   wordpress:
