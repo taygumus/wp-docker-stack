@@ -39,27 +39,6 @@ services:
     networks:
       - internal
 
-  wpcli:
-    depends_on:
-      - wordpress
-      - database
-    container_name: ${CONTAINER_NAME}-wpcli
-    image: wordpress:cli
-    env_file: .env
-    environment:
-      WORDPRESS_DB_HOST: database:3306
-      WORDPRESS_DB_NAME: ${DATABASE_NAME}
-      WORDPRESS_DB_USER: ${DATABASE_USER}
-      WORDPRESS_DB_PASSWORD: ${DATABASE_PASSWORD}
-      WORDPRESS_PATH: /var/www/html
-    volumes:
-      - wordpress:/var/www/html
-      - ./src:/var/www/html/wp-content
-      - ./scripts:/scripts
-    networks:
-      - internal
-    entrypoint: ["/scripts/entrypoint.sh"]
-
   nginx:
     depends_on:
       - wordpress
@@ -93,7 +72,49 @@ services:
       - "${PHPMYADMIN_PORT:-8001}:80"
     networks:
       - internal
- 
+
+  wp-cli:
+    depends_on:
+      - wordpress
+      - database
+    container_name: ${CONTAINER_NAME}-wp-cli
+    image: wordpress:cli
+    env_file: .env
+    environment:
+      WORDPRESS_DB_HOST: database:3306
+      WORDPRESS_DB_NAME: ${DATABASE_NAME}
+      WORDPRESS_DB_USER: ${DATABASE_USER}
+      WORDPRESS_DB_PASSWORD: ${DATABASE_PASSWORD}
+      WORDPRESS_PATH: /var/www/html
+    volumes:
+      - wordpress:/var/www/html
+      - ./src:/var/www/html/wp-content
+      - ./scripts:/scripts
+    networks:
+      - internal
+    entrypoint: ["tail", "-f", "/dev/null"]
+
+  wp-init:
+    depends_on:
+      - wordpress
+      - database
+    container_name: ${CONTAINER_NAME}-wp-init
+    image: wordpress:cli
+    env_file: .env
+    environment:
+      WORDPRESS_DB_HOST: database:3306
+      WORDPRESS_DB_NAME: ${DATABASE_NAME}
+      WORDPRESS_DB_USER: ${DATABASE_USER}
+      WORDPRESS_DB_PASSWORD: ${DATABASE_PASSWORD}
+      WORDPRESS_PATH: /var/www/html
+    volumes:
+      - wordpress:/var/www/html
+      - ./src:/var/www/html/wp-content
+      - ./scripts:/scripts
+    networks:
+      - internal
+    entrypoint: ["/scripts/entrypoint.sh"]
+
 volumes:
   dbdata:
   wordpress:

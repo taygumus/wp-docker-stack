@@ -1,10 +1,10 @@
 #!/bin/sh
 set -e
 
-. /scripts/wpcli-lib.sh
+. /scripts/wp-cli-lib.sh
 
 check_wp_path
-check_wpcli
+check_wp_cli
 wait_for_db
 
 CURRENT_SITE_URL=$(wp option get siteurl --allow-root 2>/dev/null || true)

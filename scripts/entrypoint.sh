@@ -1,17 +1,14 @@
 #!/bin/sh
 set -e
 
-if [ "${SKIP_WP_TASKS}" = "true" ]; then
-  echo "WP tasks skipped"
+if [ "${SKIP_WP_INIT}" = "true" ]; then
+  echo "WP initialization skipped"
 else
-  if [ -x /scripts/run-wp-tasks.sh ]; then
-    echo "Running WP tasks"
-    /scripts/run-wp-tasks.sh
-    echo "WP tasks completed"
+  if [ -x /scripts/run-wp-init.sh ]; then
+    echo "Running WP initialization tasks"
+    /scripts/run-wp-init.sh
+    echo "WP initialization completed"
   else
-    echo "Warning: run-wp-tasks.sh not found or not executable"
+    echo "Warning: run-wp-init.sh not found or not executable"
   fi
 fi
-
-echo "WP-CLI ready for manual commands"
-tail -f /dev/null

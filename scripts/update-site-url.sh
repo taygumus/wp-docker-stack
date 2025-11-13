@@ -1,11 +1,11 @@
 #!/bin/sh
 set -e
 
-. /scripts/wpcli-lib.sh
+. /scripts/wp-cli-lib.sh
 
 check_required_vars "CURRENT_SITE_URL SITE_URL"
 check_wp_path
-check_wpcli
+check_wp_cli
 wait_for_db
 
 echo "Starting site URL update: ${CURRENT_SITE_URL} → ${SITE_URL}"

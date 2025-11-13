@@ -24,8 +24,8 @@ check_wp_path() {
   cd "$WORDPRESS_PATH"
 }
 
-check_wpcli() {
-  if [ "${WPCLI_READY}" = "true" ]; then
+check_wp_cli() {
+  if [ "${WP_CLI_READY}" = "true" ]; then
     return 0
   fi
 
@@ -34,7 +34,7 @@ check_wpcli() {
     exit 1
   fi
 
-  export WPCLI_READY=true
+  export WP_CLI_READY=true
   echo "WP-CLI is available"
 }
 
