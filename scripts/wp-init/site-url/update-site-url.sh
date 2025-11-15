@@ -1,7 +1,10 @@
 #!/bin/sh
 set -e
 
-. /scripts/wp-cli-lib.sh
+. /scripts/utils/check-required-vars.sh
+. /scripts/wp-cli/check-wp-path.sh
+. /scripts/wp-cli/check-wp-cli.sh
+. /scripts/wp-cli/wait-for-db.sh
 
 check_required_vars "CURRENT_SITE_URL SITE_URL"
 check_wp_path

@@ -113,7 +113,7 @@ services:
       - ./scripts:/scripts
     networks:
       - internal
-    entrypoint: ["/scripts/entrypoint.sh"]
+    entrypoint: ["/scripts/wp-init/entrypoint.sh"]
 
 volumes:
   dbdata:

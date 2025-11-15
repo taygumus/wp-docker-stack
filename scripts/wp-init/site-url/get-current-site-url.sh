@@ -1,7 +1,9 @@
 #!/bin/sh
 set -e
 
-. /scripts/wp-cli-lib.sh
+. /scripts/wp-cli/check-wp-path.sh
+. /scripts/wp-cli/check-wp-cli.sh
+. /scripts/wp-cli/wait-for-db.sh
 
 check_wp_path
 check_wp_cli
