@@ -13,8 +13,6 @@ services:
       test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p${DATABASE_ROOT_PASSWORD}"]
       timeout: 30s
       retries: 10
-    ports:
-      - "3306:3306"
     volumes:
       - dbdata:/var/lib/mysql
       - ./db/init:/docker-entrypoint-initdb.d
