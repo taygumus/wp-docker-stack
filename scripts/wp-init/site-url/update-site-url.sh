@@ -4,7 +4,7 @@ set -e
 . /scripts/utils/check-required-vars.sh
 . /scripts/wp-cli/check-wp-path.sh
 . /scripts/wp-cli/check-wp-cli.sh
-. /scripts/wp-cli/wait-for-db.sh
+. /scripts/database/wait-for-db.sh
 
 check_required_vars "CURRENT_SITE_URL SITE_URL"
 check_wp_path
@@ -29,5 +29,6 @@ if wp search-replace "$CURRENT_SITE_URL" "$SITE_URL" \
   --allow-root; then
   echo "Site URL update completed successfully"
 else
-  echo "Warning: WP-CLI command failed or returned non-zero exit code"
+  echo "Error: WP-CLI command failed"
+  exit 1
 fi
