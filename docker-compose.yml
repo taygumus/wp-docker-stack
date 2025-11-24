@@ -113,6 +113,26 @@ services:
       - internal
     entrypoint: ["/scripts/wp-init/entrypoint.sh"]
 
+  db-backup:
+    depends_on:
+      - database
+    container_name: ${CONTAINER_NAME}-db-backup
+    image: mysql:8.4.7
+    env_file: .env
+    environment:
+      MYSQL_DATABASE: ${DATABASE_NAME}
+      MYSQL_USER: ${DATABASE_USER}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+      DB_BACKUP_MAX_FILES: ${DATABASE_BACKUP_MAX_FILES:-3}
+      DB_BACKUP_INITIAL_DELAY: ${DATABASE_BACKUP_INITIAL_DELAY:-60}
+      DB_BACKUP_INTERVAL: ${DATABASE_BACKUP_INTERVAL:-3600}
+    volumes:
+      - ./db/backups:/backups
+      - ./scripts:/scripts
+    networks:
+      - internal
+    entrypoint: ["/scripts/db-backup/entrypoint.sh"]
+
 volumes:
   dbdata:
   wordpress:
