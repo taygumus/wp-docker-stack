@@ -1,8 +1,8 @@
 #!/bin/sh
 set -e
 
-. /scripts/database/create-db-client-config.sh
 . /scripts/utils/interval.sh
+. /scripts/db/create-db-client-config.sh
 . /scripts/db-backup/lib/backup.sh
 . /scripts/db-backup/lib/rotation.sh
 
