@@ -1,0 +1,61 @@
+services:
+  database:
+    volumes:
+      - ./db/init:/docker-entrypoint-initdb.d
+
+  wordpress:
+    volumes:
+      - ./src:/var/www/html/wp-content:rw
+
+  nginx:
+    volumes:
+      - ./src:/var/www/html/wp-content:rw
+
+  wp-init:
+    volumes:
+      - ./src:/var/www/html/wp-content:rw
+      - ./scripts:/scripts:ro
+    entrypoint: ["/scripts/wp-init/entrypoint.sh"]
+
+  db-backup:
+    volumes:
+      - ./db/backups:/backups
+      - ./scripts:/scripts:ro
+    entrypoint: ["/scripts/db-backup/entrypoint.sh"]
+
+  wp-cli:
+    depends_on:
+      - wordpress
+      - database
+    container_name: ${CONTAINER_NAME}-wp-cli
+    image: wordpress:cli
+    env_file: .env
+    environment:
+      WORDPRESS_DB_HOST: database:3306
+      WORDPRESS_DB_NAME: ${DATABASE_NAME}
+      WORDPRESS_DB_USER: ${DATABASE_USER}
+      WORDPRESS_DB_PASSWORD: ${DATABASE_PASSWORD}
+      WORDPRESS_PATH: /var/www/html
+    volumes:
+      - wordpress:/var/www/html
+      - ./src:/var/www/html/wp-content:rw
+      - ./scripts:/scripts:ro
+    networks:
+      - internal
+    entrypoint: ["tail", "-f", "/dev/null"]
+
+  phpmyadmin:
+    depends_on:
+      - database
+    container_name: ${CONTAINER_NAME}-phpmyadmin
+    image: phpmyadmin:5.2.3
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      PMA_HOST: database
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: "${DATABASE_ROOT_PASSWORD}"
+    ports:
+      - "${PHPMYADMIN_PORT:-8001}:80"
+    networks:
+      - internal
