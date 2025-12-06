@@ -17,8 +17,8 @@ restart: down up
 logs: 
 	@$(COMPOSE) logs -f
 
-# Custom targets
-sync-siteurl:
+# Custom targets (requires containers to be running)
+syncsiteurl:
 	@$(COMPOSE) exec -T wp-cli sh /scripts/wp-init/site-url/sync-site-url.sh
 
-.PHONY: up down restart logs sync-siteurl
+.PHONY: up down restart logs syncsiteurl
