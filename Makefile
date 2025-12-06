@@ -1,17 +1,26 @@
-# Variables
-COMPOSE_DEV = docker-compose -f docker-compose.yml -f docker-compose.dev.yml
+# Variables for compose files
+COMPOSE_DEV   := docker-compose -f docker-compose.yml -f docker-compose.dev.yml
+COMPOSE_PROD  := docker-compose -f docker-compose.yml -f docker-compose.prod.yml
 
-# Main commands
+# Default compose (dev by default)
+COMPOSE := $(COMPOSE_DEV)
+
+# Primary targets
 
 up: 
-	$(COMPOSE_DEV) up -d --build
+	@$(COMPOSE) up -d --build
 
 down: 
-	$(COMPOSE_DEV) down -v
+	@$(COMPOSE) down -v
 
 restart: down up
 
 logs: 
-	$(COMPOSE_DEV) logs -f
+	@$(COMPOSE) logs -f
 
-.PHONY: up down restart logs
+# Custom targets
+
+sync-siteurl:
+	@$(COMPOSE) exec -T wp-cli sh /scripts/wp-init/site-url/sync-site-url.sh
+
+.PHONY: up down restart logs sync-siteurl
