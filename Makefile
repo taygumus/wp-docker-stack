@@ -21,4 +21,7 @@ logs:
 syncsiteurl: 
 	@$(COMPOSE) exec -T wp-cli sh /scripts/wp-init/site-url/sync-site-url.sh
 
-.PHONY: up down restart logs syncsiteurl
+restoredb:
+	@$(COMPOSE) exec -T db-cli sh -c "/scripts/db-cli/restore-db.sh '$(SQLFILE)'"
+
+.PHONY: up down restart logs syncsiteurl restoredb
