@@ -6,10 +6,10 @@ if [ "${SKIP_DB_BACKUP}" = "true" ]; then
   exit 0
 fi
 
-if [ ! -x /scripts/db-backup/run-db-backup.sh ]; then
-  echo "Error: run-db-backup.sh not found or not executable"
+if [ ! -x /scripts/db-backup/run-db-backup-periodic.sh ]; then
+  echo "Error: run-db-backup-periodic.sh not found or not executable"
   exit 1
 fi
 
 echo "Starting DB backup service"
-/scripts/db-backup/run-db-backup.sh
+/scripts/db-backup/run-db-backup-periodic.sh
