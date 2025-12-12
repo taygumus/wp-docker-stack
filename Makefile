@@ -18,10 +18,13 @@ logs:
 	@$(COMPOSE) logs -f
 
 # Dev-specific targets (requires containers to be running)
-syncsiteurl: 
+sync-site-url: 
 	@$(COMPOSE) exec -T wp-cli sh /scripts/wp-init/site-url/sync-site-url.sh
 
-restoredb:
-	@$(COMPOSE) exec -T db-cli sh -c "/scripts/db-cli/restore-db.sh '$(SQLFILE)'"
+#db-backup:
+#	@$(COMPOSE) exec -T db-cli sh /scripts/db-backup/run-db-backup.sh
+
+db-restore:
+	@$(COMPOSE) exec -T db-cli sh -c "/scripts/db-cli/run-db-restore.sh '$(SQLFILE)'"
 
 .PHONY: up down restart logs syncsiteurl restoredb
