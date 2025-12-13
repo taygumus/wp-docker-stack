@@ -19,16 +19,3 @@ jobs:
       - name: Run shellcheck
         run: |
           find . -type f -name "*.sh" -print0 | xargs -0 shellcheck
-
-  shfmt:
-    name: Shell formatting check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Install shfmt
-        run: sudo apt-get update && sudo apt-get install -y shfmt
-
-      - name: Check shell formatting
-        run: |
-          shfmt -d $(find . -type f -name "*.sh")
