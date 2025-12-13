@@ -11,5 +11,5 @@ check_wp_path() {
     exit 1
   fi
 
-  cd "$WORDPRESS_PATH"
+  cd "$WORDPRESS_PATH" || exit 1
 }
