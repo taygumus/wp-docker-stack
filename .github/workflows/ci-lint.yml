@@ -1,4 +1,4 @@
-name: Lint & Validate
+name: Lint and Validate
 
 on:
   pull_request:
@@ -11,7 +11,7 @@ jobs:
     name: Shell scripts lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.1
+      - uses: actions/checkout@v6
 
       - name: Install shellcheck
         run: sudo apt-get update && sudo apt-get install -y shellcheck
@@ -24,13 +24,10 @@ jobs:
     name: Shell formatting check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.1
+      - uses: actions/checkout@v6
 
       - name: Install shfmt
-        run: |
-          curl -L https://github.com/mvdan/sh/releases/download/v3.12.0/shfmt_v3.12.0_linux_amd64 \
-            -o /usr/local/bin/shfmt
-          chmod +x /usr/local/bin/shfmt
+        run: sudo apt-get update && sudo apt-get install -y shfmt
 
       - name: Check shell formatting
         run: |
