@@ -8,7 +8,7 @@ on:
 
 jobs:
   shellcheck:
-    name: Shell scripts lint
+    name: Shell scripts validation
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
