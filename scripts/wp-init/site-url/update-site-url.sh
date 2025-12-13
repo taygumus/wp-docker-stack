@@ -7,6 +7,7 @@ set -e
 . /scripts/db/wait-for-db.sh
 
 check_required_vars "CURRENT_SITE_URL SITE_URL"
+
 check_wp_path
 check_wp_cli
 
@@ -24,8 +25,9 @@ else
   echo "No columns will be skipped"
 fi
 
+# shellcheck disable=SC2086
 if wp search-replace "$CURRENT_SITE_URL" "$SITE_URL" \
-  "$SKIP_COLUMNS_FLAG" \
+  $SKIP_COLUMNS_FLAG \
   --all-tables \
   --precise \
   --allow-root; then
