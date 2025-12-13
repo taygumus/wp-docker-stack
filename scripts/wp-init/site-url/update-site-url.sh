@@ -9,6 +9,8 @@ set -e
 check_required_vars "CURRENT_SITE_URL SITE_URL"
 check_wp_path
 check_wp_cli
+
+# shellcheck disable=SC2119
 wait_for_db
 
 echo "Starting site URL update: ${CURRENT_SITE_URL} → ${SITE_URL}"
