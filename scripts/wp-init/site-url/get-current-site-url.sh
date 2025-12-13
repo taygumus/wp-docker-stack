@@ -19,4 +19,6 @@ if [ -z "$CURRENT_SITE_URL" ]; then
 fi
 
 echo "Detected current site URL: ${CURRENT_SITE_URL}"
-export CURRENT_SITE_URL="${CURRENT_SITE_URL}" // capire se si può migliorare
+
+readonly CURRENT_SITE_URL
+export CURRENT_SITE_URL
