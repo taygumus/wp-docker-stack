@@ -1,14 +1,14 @@
 #!/bin/sh
 
 do_backup() {
-    local db_name="$1"
-    local backup_dir="$2"
+    _db_name=$1
+    _backup_dir=$2
 
-    local timestamp
-    timestamp=$(date +"%Y%m%d-%H%M%S")
-    local file="$backup_dir/backup-$timestamp.sql"
+    _timestamp=$(date +"%Y%m%d-%H%M%S")
+    _file="$_backup_dir/backup-$_timestamp.sql"
 
-    echo "Executing backup: $file"
-    mysqldump --no-tablespaces "$db_name" > "$file"
-    echo "Backup completed: $file"
+    echo "Executing backup: $_file"
+    mysqldump --no-tablespaces "$_db_name" > "$_file"
+
+    echo "Backup completed: $_file"
 }

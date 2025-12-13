@@ -7,8 +7,11 @@ set -e
 . /scripts/db/wait-for-db.sh
 
 check_required_vars "CURRENT_SITE_URL SITE_URL"
+
 check_wp_path
 check_wp_cli
+
+# shellcheck disable=SC2119
 wait_for_db
 
 echo "Starting site URL update: ${CURRENT_SITE_URL} → ${SITE_URL}"
@@ -22,6 +25,7 @@ else
   echo "No columns will be skipped"
 fi
 
+# shellcheck disable=SC2086
 if wp search-replace "$CURRENT_SITE_URL" "$SITE_URL" \
   $SKIP_COLUMNS_FLAG \
   --all-tables \
