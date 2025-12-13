@@ -25,7 +25,7 @@ else
 fi
 
 if wp search-replace "$CURRENT_SITE_URL" "$SITE_URL" \
-  $SKIP_COLUMNS_FLAG \
+  "$SKIP_COLUMNS_FLAG" \
   --all-tables \
   --precise \
   --allow-root; then
