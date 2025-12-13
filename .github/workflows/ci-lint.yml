@@ -24,13 +24,16 @@ jobs:
     name: Docker Compose validation
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.1
+      - uses: actions/checkout@v6
 
       - name: Install yamllint
         run: sudo apt-get update && sudo apt-get install -y yamllint
 
       - name: YAML lint
         run: yamllint docker-compose*.yml
+      
+      - name: Prepare env file for compose validation
+        run: cp .env.example .env
 
       - name: Docker Compose config check
         run: |
