@@ -19,3 +19,22 @@ jobs:
       - name: Run shellcheck
         run: |
           find . -type f -name "*.sh" -print0 | xargs -0 shellcheck
+  
+  docker-compose:
+    name: Docker Compose validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.1
+
+      - name: Install yamllint
+        run: sudo apt-get update && sudo apt-get install -y yamllint
+
+      - name: YAML lint
+        run: yamllint docker-compose*.yml
+
+      - name: Docker Compose config check
+        run: |
+          docker compose \
+            -f docker-compose.yml \
+            -f docker-compose.dev.yml \
+            config > /dev/null
