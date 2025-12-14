@@ -5,6 +5,14 @@ COMPOSE_DEV := docker-compose -f docker-compose.yml -f docker-compose.dev.yml
 # Default compose (dev by default)
 COMPOSE := $(COMPOSE_DEV)
 
+# Standard targets
+all: up
+
+clean: down
+
+test:
+	@$(COMPOSE) config -q && echo "Docker Compose configuration is valid."
+
 # Primary targets
 up: 
 	@$(COMPOSE) up -d --build
@@ -27,4 +35,4 @@ db-backup:
 db-restore:
 	@$(COMPOSE) exec -T db-cli sh -c "/scripts/db-cli/run-db-restore.sh '$(SQLFILE)'"
 
-.PHONY: up down restart logs sync-site-url db-backup db-restore
+.PHONY: all clean test up down restart logs sync-site-url db-backup db-restore
