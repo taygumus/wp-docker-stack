@@ -8,7 +8,7 @@ on:
 
 jobs:
   shellcheck:
-    name: Shell scripts lint
+    name: Shell scripts validation
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -19,3 +19,25 @@ jobs:
       - name: Run shellcheck
         run: |
           find . -type f -name "*.sh" -print0 | xargs -0 shellcheck
+  
+  docker-compose:
+    name: Docker Compose validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install yamllint
+        run: sudo apt-get update && sudo apt-get install -y yamllint
+
+      - name: YAML lint
+        run: yamllint docker-compose*.yml
+      
+      - name: Prepare env file for compose validation
+        run: cp .env.example .env
+
+      - name: Docker Compose config check
+        run: |
+          docker compose \
+            -f docker-compose.yml \
+            -f docker-compose.dev.yml \
+            config > /dev/null
