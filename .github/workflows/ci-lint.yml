@@ -41,3 +41,30 @@ jobs:
             -f docker-compose.yml \
             -f docker-compose.dev.yml \
             config > /dev/null
+
+makefile:
+    name: Makefile lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install checkmake
+        run: |
+          curl -L https://github.com/mrtazz/checkmake/releases/download/0.2.2/checkmake-0.2.2.linux.amd64 \
+            -o /usr/local/bin/checkmake
+          chmod +x /usr/local/bin/checkmake
+
+      - name: Run checkmake
+        run: checkmake Makefile
+
+markdown:
+  name: Markdown lint
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v6
+
+    - name: Install markdownlint-cli
+      run: sudo npm install -g markdownlint-cli
+
+    - name: Run markdownlint
+      run: markdownlint "**/*.md"
