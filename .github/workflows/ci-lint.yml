@@ -48,8 +48,14 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Checkmake action
-        uses: Uno-Takashi/checkmake-action@v2
+      - name: Install checkmake
+        run: |
+          curl -L https://github.com/mrtazz/checkmake/releases/download/0.2.2/checkmake-0.2.2.linux.amd64 \
+            -o /usr/local/bin/checkmake
+          chmod +x /usr/local/bin/checkmake
+
+      - name: Run checkmake
+        run: checkmake Makefile
 
   markdown:
     name: Markdown lint
