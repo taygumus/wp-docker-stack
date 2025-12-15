@@ -50,7 +50,7 @@ jobs:
 
       - name: Install checkmake
         run: |
-          go install github.com/checkmake/checkmake@v0.2.2
+          go install github.com/checkmake/checkmake@48ab781
           echo "$HOME/go/bin" >> $GITHUB_PATH
 
       - name: Run checkmake
