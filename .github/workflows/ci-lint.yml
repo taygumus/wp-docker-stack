@@ -43,19 +43,18 @@ jobs:
             config > /dev/null
 
   makefile:
-    name: Makefile lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
+  name: Makefile lint
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v4
 
-      - name: Install checkmake
-        run: |
-          curl -L https://github.com/mrtazz/checkmake/releases/download/0.2.2/checkmake-0.2.2.linux.amd64 \
-            -o /usr/local/bin/checkmake
-          chmod +x /usr/local/bin/checkmake
+    - name: Install checkmake
+      run: |
+        go install github.com/mrtazz/checkmake@v0.2.2
 
-      - name: Run checkmake
-        run: checkmake Makefile
+    - name: Run checkmake
+      run: |
+        ~/go/bin/checkmake Makefile
 
   markdown:
     name: Markdown lint
