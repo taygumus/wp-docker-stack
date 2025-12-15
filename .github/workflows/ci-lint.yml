@@ -48,11 +48,12 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Install checkmake
+      - name: Build checkmake
         run: |
-          curl -L https://github.com/mrtazz/checkmake/releases/download/0.2.2/checkmake-0.2.2.linux.amd64 \
-            -o /usr/local/bin/checkmake
-          chmod +x /usr/local/bin/checkmake
+          git clone --depth 1 --branch 0.2.2 https://github.com/checkmake/checkmake.git /tmp/checkmake &&
+          cd /tmp/checkmake &&
+          go build -o checkmake ./cmd/checkmake &&
+          echo "/tmp/checkmake" >> "$GITHUB_PATH"
 
       - name: Run checkmake
         run: checkmake Makefile
