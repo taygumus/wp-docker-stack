@@ -43,18 +43,18 @@ jobs:
             config > /dev/null
 
   makefile:
-  name: Makefile lint
-  runs-on: ubuntu-latest
-  steps:
-    - uses: actions/checkout@v4
+    name: Makefile lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
 
-    - name: Install checkmake
-      run: |
-        go install github.com/mrtazz/checkmake@v0.2.2
+      - name: Install checkmake
+        run: |
+          go install github.com/mrtazz/checkmake@v0.2.2
 
-    - name: Run checkmake
-      run: |
-        ~/go/bin/checkmake Makefile
+      - name: Run checkmake
+        run: |
+          ~/go/bin/checkmake Makefile
 
   markdown:
     name: Markdown lint
