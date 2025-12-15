@@ -50,7 +50,7 @@ jobs:
 
       - name: Install checkmake
         run: |
-          go install github.com/mrtazz/checkmake@v0.2.2
+          go install github.com/checkmake/checkmake@v0.2.2
 
       - name: Run checkmake
         run: |
