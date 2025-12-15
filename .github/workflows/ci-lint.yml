@@ -50,10 +50,10 @@ jobs:
 
       - name: Install checkmake
         run: |
-          git clone https://github.com/checkmake/checkmake.git
+          git clone --depth 1 --branch 0.2.2 https://github.com/checkmake/checkmake.git
           cd checkmake
-          go build -v ./cmd/checkmake
-          sudo mv checkmake /usr/local/bin/
+          go build -v -o checkmake ./cmd/checkmake
+          echo "$PWD" >> $GITHUB_PATH
 
       - name: Run checkmake
         run: checkmake Makefile
