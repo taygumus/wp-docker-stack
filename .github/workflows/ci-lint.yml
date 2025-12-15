@@ -46,14 +46,14 @@ jobs:
     name: Makefile lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - name: Install checkmake
+      - name: Build checkmake
         run: |
-          git clone --depth 1 --branch 0.2.2 https://github.com/checkmake/checkmake.git
-          cd checkmake
-          go build -v -o checkmake ./cmd/checkmake
-          echo "$PWD" >> $GITHUB_PATH
+          git clone --depth 1 --branch 0.2.2 https://github.com/checkmake/checkmake.git /tmp/checkmake &&
+          cd /tmp/checkmake &&
+          go build -o checkmake ./cmd/checkmake &&
+          echo "/tmp/checkmake" >> "$GITHUB_PATH"
 
       - name: Run checkmake
         run: checkmake Makefile
