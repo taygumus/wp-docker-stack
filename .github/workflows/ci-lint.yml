@@ -50,8 +50,10 @@ jobs:
 
       - name: Install checkmake
         run: |
-          go install github.com/checkmake/checkmake
-          echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
+          git clone https://github.com/checkmake/checkmake.git
+          cd checkmake
+          go build -v ./cmd/checkmake
+          sudo mv checkmake /usr/local/bin/
 
       - name: Run checkmake
         run: checkmake Makefile
