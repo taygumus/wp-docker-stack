@@ -5,8 +5,18 @@ COMPOSE_DEV := docker-compose -f docker-compose.yml -f docker-compose.dev.yml
 # Default compose (dev by default)
 COMPOSE := $(COMPOSE_DEV)
 
+# Standard targets
+all: up
+
+clean: down
+
+test:
+	@$(COMPOSE) config -q && echo "Docker Compose configuration is valid."
+
+Edd
+
 # Primary targets
-up: s
+up: 
 	@$(COMPOSE) up -d --build
 
 down: 
