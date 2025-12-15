@@ -6,7 +6,7 @@ COMPOSE_DEV := docker-compose -f docker-compose.yml -f docker-compose.dev.yml
 COMPOSE := $(COMPOSE_DEV)
 
 # Primary targets
-up: 
+up: s
 	@$(COMPOSE) up -d --build
 
 down: 
