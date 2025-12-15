@@ -46,15 +46,15 @@ jobs:
     name: Makefile lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
 
       - name: Install checkmake
         run: |
           go install github.com/checkmake/checkmake@v0.2.2
+          echo "$HOME/go/bin" >> $GITHUB_PATH
 
       - name: Run checkmake
-        run: |
-          ~/go/bin/checkmake Makefile
+        run: checkmake Makefile
 
   markdown:
     name: Markdown lint
