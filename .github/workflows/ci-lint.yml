@@ -48,15 +48,8 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Build checkmake
-        run: |
-          git clone --depth 1 --branch 0.2.2 https://github.com/checkmake/checkmake.git /tmp/checkmake &&
-          cd /tmp/checkmake &&
-          go build -o checkmake ./cmd/checkmake &&
-          echo "/tmp/checkmake" >> "$GITHUB_PATH"
-
-      - name: Run checkmake
-        run: checkmake Makefile
+      - name: Checkmake action
+        uses: Uno-Takashi/checkmake-action@v2
 
   markdown:
     name: Markdown lint
