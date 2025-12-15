@@ -37,4 +37,4 @@ db-backup:
 db-restore:
 	@$(COMPOSE) exec -T db-cli sh -c "/scripts/db-cli/run-db-restore.sh '$(SQLFILE)'"
 
-.PHONY: up down restart logs sync-site-url db-backup db-restore
+.PHONY: all clean test up down restart logs sync-site-url db-backup db-restore
