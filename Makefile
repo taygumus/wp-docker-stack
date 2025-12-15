@@ -13,6 +13,8 @@ COMPOSE := $(COMPOSE_DEV)
 #test:
 #	@$(COMPOSE) config -q && echo "Docker Compose configuration is valid."
 
+test
+
 # Primary targets
 up: 
 	@$(COMPOSE) up -d --build
@@ -35,4 +37,4 @@ db-backup:
 db-restore:
 	@$(COMPOSE) exec -T db-cli sh -c "/scripts/db-cli/run-db-restore.sh '$(SQLFILE)'"
 
-.PHONY: all clean test up down restart logs sync-site-url db-backup db-restore
+.PHONY: up down restart logs sync-site-url db-backup db-restore
