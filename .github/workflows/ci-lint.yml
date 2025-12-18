@@ -51,11 +51,15 @@ jobs:
       - name: Install checkmake
         run: |
           git clone --depth 1 --branch 0.2.2 https://github.com/checkmake/checkmake /tmp/checkmake
+          cd /tmp/checkmake
           go build -o checkmake ./cmd/checkmake
+          echo "/tmp/checkmake" >> "$GITHUB_PATH"
 
       - name: Run checkmake
         run: |
-          find . -type f \( -name "Makefile" -o -name "makefile" \) ! -path "./.git/*" -exec checkmake {} \;
+          find . -type f \( -name "Makefile" -o -name "makefile" \) \
+            ! -path "./.git/*" \
+            -exec checkmake {} \;
 
   markdown:
     name: Markdown lint
