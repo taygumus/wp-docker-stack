@@ -50,9 +50,8 @@ jobs:
 
       - name: Install checkmake
         run: |
-          curl -sL https://github.com/checkmake/checkmake/releases/download/0.2.2/checkmake-0.2.2.linux.amd64 \
-            -o /usr/local/bin/checkmake
-          chmod +x /usr/local/bin/checkmake
+          git clone --depth 1 --branch 0.2.2 https://github.com/checkmake/checkmake /tmp/checkmake
+          go build -o checkmake ./cmd/checkmake
 
       - name: Run checkmake
         run: |
