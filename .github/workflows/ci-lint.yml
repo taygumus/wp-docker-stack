@@ -1,4 +1,4 @@
-name: Lint and Validate
+name: Lint checks
 
 on:
   pull_request:
@@ -7,8 +7,8 @@ on:
       - main
 
 jobs:
-  shellcheck:
-    name: Shell scripts validation
+  shell-lint:
+    name: Shell script lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -19,9 +19,9 @@ jobs:
       - name: Run shellcheck
         run: |
           find . -type f -name "*.sh" -print0 | xargs -0 shellcheck
-  
-  docker-compose:
-    name: Docker Compose validation
+
+  compose-lint:
+    name: Docker Compose lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -29,20 +29,20 @@ jobs:
       - name: Install yamllint
         run: sudo apt-get update && sudo apt-get install -y yamllint
 
-      - name: YAML lint
+      - name: Run yamllint
         run: yamllint docker-compose*.yml
-      
-      - name: Prepare env file for compose validation
+
+      - name: Prepare env file for compose config check
         run: cp .env.example .env
 
-      - name: Docker Compose config check
+      - name: Validate Docker Compose config
         run: |
           docker compose \
             -f docker-compose.yml \
             -f docker-compose.dev.yml \
             config > /dev/null
 
-  makefile:
+  makefile-lint:
     name: Makefile lint
     runs-on: ubuntu-latest
     steps:
@@ -61,7 +61,7 @@ jobs:
             ! -path "./.git/*" \
             -exec checkmake {} \;
 
-  markdown:
+  markdown-lint:
     name: Markdown lint
     runs-on: ubuntu-latest
     steps:
