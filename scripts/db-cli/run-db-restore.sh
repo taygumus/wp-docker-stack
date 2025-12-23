@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-. /scripts/db/create-db-client-config.sh
+. /scripts/db-common/create-db-client-config.sh
 
 FILE="$1"
 

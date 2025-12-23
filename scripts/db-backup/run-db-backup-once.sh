@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-. /scripts/db/create-db-client-config.sh
+. /scripts/db-common/create-db-client-config.sh
 . /scripts/db-backup/lib/backup.sh
 
 DB_NAME="${MYSQL_DATABASE}"

@@ -4,7 +4,7 @@ set -e
 . /scripts/utils/check-required-vars.sh
 . /scripts/wp-cli/check-wp-path.sh
 . /scripts/wp-cli/check-wp-cli.sh
-. /scripts/db/wait-for-db.sh
+. /scripts/db-common/wait-for-db.sh
 
 check_required_vars "CURRENT_SITE_URL SITE_URL"
 
