@@ -10,9 +10,14 @@ up:
 	@$(COMPOSE) up -d --build
 
 down: 
+	@$(COMPOSE) down
+
+clean: 
 	@$(COMPOSE) down -v
 
 restart: down up
+
+reset: clean up
 
 logs: 
 	@$(COMPOSE) logs -f
@@ -27,4 +32,4 @@ db-backup:
 db-restore: 
 	@$(COMPOSE) exec -T db-cli sh -c "/scripts/db-cli/run-db-restore.sh '$(SQLFILE)'"
 
-.PHONY: all clean test up down restart logs sync-site-url db-backup db-restore
+.PHONY: up down clean restart reset logs sync-site-url db-backup db-restore
