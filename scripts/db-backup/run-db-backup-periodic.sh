@@ -2,7 +2,7 @@
 set -e
 
 . /scripts/utils/interval.sh
-. /scripts/db/create-db-client-config.sh
+. /scripts/db-common/create-db-client-config.sh
 . /scripts/db-backup/lib/backup.sh
 . /scripts/db-backup/lib/rotation.sh
 

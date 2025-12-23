@@ -3,7 +3,7 @@ set -e
 
 . /scripts/wp-cli/check-wp-path.sh
 . /scripts/wp-cli/check-wp-cli.sh
-. /scripts/db/wait-for-db.sh
+. /scripts/db-common/wait-for-db.sh
 
 check_wp_path
 check_wp_cli

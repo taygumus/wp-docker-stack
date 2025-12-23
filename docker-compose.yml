@@ -12,7 +12,7 @@ services:
     healthcheck:
       test:
         - CMD-SHELL
-        - mysqladmin ping -h localhost -u root -p${DATABASE_ROOT_PASSWORD}
+        - mysqladmin ping -h localhost -u root -p"${DATABASE_ROOT_PASSWORD}"
       timeout: 30s
       retries: 10
     volumes:

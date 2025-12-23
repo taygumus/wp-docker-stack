@@ -10,9 +10,14 @@ up:
 	@$(COMPOSE) up -d --build
 
 down: 
+	@$(COMPOSE) down
+
+clean: 
 	@$(COMPOSE) down -v
 
 restart: down up
+
+reset: clean up
 
 logs: 
 	@$(COMPOSE) logs -f
@@ -21,10 +26,10 @@ logs:
 sync-site-url: 
 	@$(COMPOSE) exec -T wp-cli sh /scripts/wp-init/site-url/sync-site-url.sh
 
-db-backup:
+db-backup: 
 	@$(COMPOSE) exec -T db-cli sh /scripts/db-backup/run-db-backup-once.sh
 
-db-restore:
+db-restore: 
 	@$(COMPOSE) exec -T db-cli sh -c "/scripts/db-cli/run-db-restore.sh '$(SQLFILE)'"
 
-.PHONY: all clean test up down restart logs sync-site-url db-backup db-restore
+.PHONY: up down clean restart reset logs sync-site-url db-backup db-restore
