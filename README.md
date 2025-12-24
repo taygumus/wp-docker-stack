@@ -29,3 +29,43 @@ This project supports multiple workflows that commonly emerge when working with 
 4. **Continuous database safety**  
    Database content is backed up automatically at configurable intervals using a FIFO rotation policy.  
    Backups and on-demand snapshots can also be triggered manually.
+
+## Quick Start
+
+### Prerequisites
+
+- Docker
+- Docker Compose
+- GNU Make
+
+### Setup
+
+Clone the repository and initialize the configuration:
+
+```sh
+git clone <repository-url>
+cd wp-docker-stack
+cp .env.example .env 
+```
+
+### Start the stack
+
+Orchestrate and launch all services:
+
+```sh
+make up
+```
+
+### Access the services
+
+* **WordPress:** Accessible at `http://<SERVER_NAME>:<HTTP_PORT>` as configured in your `.env` file.
+* **Database Management:** Available via the database CLI (`db-cli`) or optional GUI tools such as phpMyAdmin.
+
+
+### Stop the stack
+
+Gracefully shut down all running services:
+
+```sh
+make down
+```
