@@ -97,10 +97,10 @@ Manages automated snapshots and implements a data safety policy.
 * **`SKIP_DB_BACKUP`**: Set to `true` to disable the automated backup service during `make up`.
 * **`DATABASE_BACKUP_MAX_FILES`**: Number of historical snapshots to keep (**FIFO rotation policy**).
 * **`DATABASE_BACKUP_INITIAL_DELAY`**: Wait time before the first backup (supports `s/m/h/d`, e.g., `60s`).
-* **`DATABASE_BACKUP_INTERVAL`**: Frequency of subsequent backups (e.g., `3600s`).
+* **`DATABASE_BACKUP_INTERVAL`**: Frequency of subsequent backups.
 
 ### 5. Management Tools (Optional)
-* **`PHPMYADMIN_PORT`**: Host port for the optional phpMyAdmin web interface (e.g., `8001`).
+* **`PHPMYADMIN_PORT`**: Host port for the optional phpMyAdmin web interface.
 
 ## Operational Interface
 
