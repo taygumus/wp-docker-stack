@@ -142,9 +142,11 @@ The `Makefile` provides a stable, minimal interface for common operations:
 
 ### Specialized Tasks
 
-* `make sync-site-url`: Manually trigger site URL synchronization.
-* `make db-backup`: Execute a one-off database backup.
-* `make db-restore SQLFILE=x.sql`: Restore a specific dump from the `db/` directory.
+- `make sync-site-url`: Manually trigger site URL synchronization.
+
+- `make db-backup`: Execute a one-off database backup.
+
+- `make db-restore SQLFILE=x.sql`: Restore a specific dump from the `db/` directory.
 
 ## Architecture & Workflow
 
