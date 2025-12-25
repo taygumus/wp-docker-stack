@@ -150,8 +150,9 @@ The `Makefile` provides a stable, minimal interface for common operations:
 
 ## Architecture & Workflow
 
-The following diagram provides a conceptual overview of how services interact
-within the stack.
+The stack implements a **Three-Tier Architecture**, strictly separating the presentation, application, and data layers from the operations plane.
+
+### System Diagram
 
 ```mermaid
 flowchart TB
@@ -209,96 +210,27 @@ flowchart TB
     DB_CLI -.-> DB
 ```
 
-The stack is organized around a clear separation between application runtime,
-infrastructure orchestration, and automation logic.
+### Core Principles
 
-Docker Compose is used as the orchestration layer, while all non-trivial
-operations (initialization, migration, synchronization, backups) are delegated
-to explicit, service-scoped shell scripts.
+- **Sidecar Pattern**: Operations like initialization and backups run in dedicated, ephemeral containers. This ensures the application runtime remains immutable, secure, and focused solely on serving traffic.
 
-This approach keeps the runtime predictable and avoids hidden behavior inside
-custom images or implicit container side effects.
+- **Layered Composition**: The environment is split between two logical planes:
+  - `docker-compose.yml`: Defines the **Core Runtime** (Nginx, WordPress, Database).
 
-### Docker Compose Structure
+  - `docker-compose.dev.yml`: Extends the stack with the **Ops Plane** (Init services, Backups, and CLI tools).
 
-The project is composed of two Compose files:
-
-- `docker-compose.yml`  
-  Defines the core services required to run WordPress:
-  WordPress (PHP), database engine, Nginx, and shared volumes.
-
-- `docker-compose.dev.yml`  
-  Extends the base stack with development and operational tooling such as:
-  initialization services, backup automation, CLI containers, and optional
-  database management interfaces.
-
-This layered approach allows the base stack to remain minimal, while enabling
-additional functionality without modifying the core runtime definition.
+- **Script-Driven Automation**: All logic resides in POSIX-compliant shell scripts under `scripts/`. This approach decouples automation from container images, making execution order and failure modes explicit and auditable.
 
 ### Service Responsibilities
 
-Each container has a narrowly defined responsibility:
-
-- **WordPress / Nginx**  
-  Handle application runtime and HTTP traffic only.
-
-- **Database service**  
-  Provides persistent data storage via named volumes.
-
-- **Initialization service (`wp-init`)**  
-  Executes one-time or repeatable initialization tasks:
-  database imports, site URL detection, and URL synchronization.
-
-- **Data Safety (`db-backup`)**  
-  Performs periodic database snapshots with a FIFO rotation policy.
-
-- **CLI services (`wp-cli`, `db-cli`)**  
-  Provide an always-available operational interface for manual maintenance
-  and are reused internally by automation tasks.
-
-Services communicate exclusively through Docker networks and volumes.
-No container embeds logic that belongs to another lifecycle phase.
-
-### Script-Driven Automation
-
-All automation logic lives under the `scripts/` directory and is structured
-by functional domain.
-
-Each subdirectory maps directly to a service or shared concern, making the
-relationship between containers and scripts explicit:
-
-- service-specific logic is colocated with the service that executes it
-- shared functionality (e.g. DB readiness checks, interval parsing) is
-  extracted into reusable utilities
-
-Scripts are POSIX-compliant, composable, and designed to be readable and
-auditable. This makes execution order, side effects, and failure modes explicit.
-
-### Workflow Overview
-
-A typical workflow follows these steps:
-
-1. Containers are started via `make up`.
-2. Core services become available (database, WordPress, Nginx).
-3. Optional initialization services run deterministic setup tasks.
-4. Long-running automation (e.g. backups) operates independently.
-5. Manual operations are performed via Make targets or CLI containers.
-
-Each phase is isolated, repeatable, and observable, which simplifies debugging
-and future extension.
-
-### Extensibility
-
-The architecture is intentionally open for extension:
-
-- new initialization tasks can be added to `wp-init`
-- additional automation services can be introduced without altering the core
-  stack
-- production-oriented overrides can be layered on top of the existing Compose
-  files
-
-This makes the project suitable both as a local development environment and as
-a foundation for more advanced deployment scenarios.
+| Service | Role | Layer |
+| :--- | :--- | :--- |
+| **Nginx** | Reverse proxy, SSL termination, and static asset handling. | Presentation |
+| **WordPress** | Application logic execution via PHP-FPM. | Application |
+| **Database** | Persistent data storage (MySQL) via named volumes. | Data |
+| **Initialization (`wp-init`)** | Deterministic setup, DB imports, and site URL synchronization. | Ops Plane |
+| **Data Safety (`db-backup`)** | Automated snapshots and maintenance of the FIFO backup policy. | Ops Plane |
+| **CLIs** | Stateless interfaces for manual maintenance (`wp-cli`, `db-cli`). | Ops Plane |
 
 ## Design Decisions
 
