@@ -8,6 +8,18 @@ This repository provides a structured and repeatable way to run and manage WordP
 
 The objective is to offer a deterministic and extensible environment suitable for both straightforward WordPress setups and for more advanced development, migration, and data safety scenarios.
 
+## Contents
+
+- [Overview](#overview)
+- [Typical Use Cases](#typical-use-cases)
+- [Quick Start](#quick-start)
+- [Configuration](#configuration)
+- [Operational Interface](#operational-interface)
+- [Architecture & Workflow](#architecture--workflow)
+- [Design Decisions](#design-decisions)
+- [Quality Gates and CI](#quality-gates-and-ci)
+- [Contributions](#contributions)
+
 ## Typical Use Cases
 
 This project supports multiple workflows that commonly emerge when working with WordPress:
@@ -132,6 +144,51 @@ to explicit, service-scoped shell scripts.
 This approach keeps the runtime predictable and avoids hidden behavior inside
 custom images or implicit container side effects.
 
+### High-Level Architecture
+
+The following diagram provides a conceptual overview of how services interact
+within the stack.
+
+```mermaid
+flowchart TB
+    User((User))
+
+    subgraph Edge [Presentation Layer]
+        Nginx[Nginx]
+        PMA[phpMyAdmin]
+    end
+
+    subgraph App [Application Layer]
+        WP[WordPress]
+    end
+
+    subgraph Data [Data Layer]
+        DB[(Database)]
+        Vol[(Persistent Volumes)]
+    end
+
+    subgraph Ops [Automation Plane]
+        WP_INIT[wp-init]
+        DB_BACKUP[db-backup]
+        WP_CLI[wp-cli]
+        DB_CLI[db-cli]
+    end
+
+    User --> Nginx
+    User --> PMA
+
+    Nginx --> WP
+    WP --> DB
+    DB --- Vol
+    PMA -.-> DB
+
+    WP_INIT --> WP
+    WP_INIT --> DB
+    DB_BACKUP --> DB
+    WP_CLI -.-> WP
+    DB_CLI -.-> DB
+```
+
 ### Docker Compose Structure
 
 The project is composed of two Compose files:
@@ -212,37 +269,6 @@ The architecture is intentionally open for extension:
 
 This makes the project suitable both as a local development environment and as
 a foundation for more advanced deployment scenarios.
-
-## High-Level Architecture
-
-The following diagram provides a conceptual overview of how services interact
-within the stack.
-
-```mermaid
-flowchart LR
-    User((User)) --> Nginx
-    User --> PMA[phpMyAdmin]
-    
-    subgraph App [Application Runtime]
-        Nginx --> WP[WordPress]
-    end
-
-    subgraph Data [Storage Layer]
-        WP --> DB[(Database)]
-        DB --- Vol[(Persistent Volumes)]
-        PMA -.-> DB
-    end
-
-    subgraph Automation [Automation & Tools]
-        WP_INIT[wp-init] --> WP
-        WP_INIT --> DB
-        DB_BACKUP[db-backup] --> DB
-        WP_CLI[wp-cli] -.-> WP
-        DB_CLI[db-cli] -.-> DB
-    end
-
-    style Automation fill:#646464,stroke:#333
-```
 
 ## Design Decisions
 
