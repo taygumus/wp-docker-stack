@@ -231,6 +231,7 @@ flowchart LR
     db-cli --> DB
 
     DB -->|Volumes| Storage[(Persistent Volumes)]
+```
 
 ## Design Decisions
 
