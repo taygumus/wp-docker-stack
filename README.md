@@ -95,7 +95,7 @@ The stack is driven by environment variables defined in the `.env` file. This ap
 
 ### 2. Database Configuration
 
-Configures the MySQL/MariaDB instance used by both the DB engine and WordPress.
+Configures the MySQL instance used by both the DB engine and WordPress.
 
 - `DATABASE_NAME`, `DATABASE_USER`, `DATABASE_PASSWORD`
 
@@ -149,16 +149,6 @@ The `Makefile` provides a stable, minimal interface for common operations:
 - `make db-restore SQLFILE=x.sql`: Restore a specific dump from the `db/` directory.
 
 ## Architecture & Workflow
-
-The stack is organized around a clear separation between application runtime,
-infrastructure orchestration, and automation logic.
-
-Docker Compose is used as the orchestration layer, while all non-trivial
-operations (initialization, migration, synchronization, backups) are delegated
-to explicit, service-scoped shell scripts.
-
-This approach keeps the runtime predictable and avoids hidden behavior inside
-custom images or implicit container side effects.
 
 ### High-Level Architecture
 
@@ -220,6 +210,16 @@ flowchart TB
     WP_CLI -.-> WP
     DB_CLI -.-> DB
 ```
+
+The stack is organized around a clear separation between application runtime,
+infrastructure orchestration, and automation logic.
+
+Docker Compose is used as the orchestration layer, while all non-trivial
+operations (initialization, migration, synchronization, backups) are delegated
+to explicit, service-scoped shell scripts.
+
+This approach keeps the runtime predictable and avoids hidden behavior inside
+custom images or implicit container side effects.
 
 ### Docker Compose Structure
 
