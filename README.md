@@ -198,7 +198,7 @@ flowchart TB
 
     %% Persistence
     DB --- V_DB
-    WP --- V_WP
+    WP --> V_WP
     WP_INIT --> V_WP
 
     %% Operations interactions
