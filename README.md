@@ -14,11 +14,18 @@
 
 ## Overview
 
-A Docker Compose–based WordPress environment focused on automation, reproducibility, and separation of concerns.
+A Docker Compose–based WordPress environment focused on automation,
+reproducibility, and separation of concerns.
 
-This repository provides a structured and repeatable way to run and manage WordPress using containers. The stack relies on explicit configuration, script-driven automation, and a clear boundary between application logic and infrastructure responsibilities.
+This repository provides a structured and repeatable way to run and operate
+WordPress using containers. All lifecycle tasks are handled through explicit
+configuration and script-driven automation, keeping application runtime and
+infrastructure responsibilities clearly separated.
 
-The objective is to offer a deterministic and extensible environment suitable for both straightforward WordPress setups and for more advanced development, migration, and data safety scenarios.
+The stack addresses common issues in containerized WordPress setups, such as
+implicit initialization logic, environment drift, and hard-to-audit automation,
+while remaining extensible for more advanced development and migration
+scenarios.
 
 ## Typical Use Cases
 
@@ -42,7 +49,13 @@ This project supports multiple workflows that commonly emerge when working with 
    Database content is backed up automatically at configurable intervals using a FIFO rotation policy.  
    Backups and on-demand snapshots can also be triggered manually.
 
+Once a relevant workflow is identified, the stack can be started and operated
+with a minimal setup.
+
 ## Quick Start
+
+This section provides the fastest path to a running environment using the
+default configuration.
 
 ### Prerequisites
 
@@ -150,9 +163,18 @@ The `Makefile` provides a stable, minimal interface for common operations:
 
 ## Architecture & Workflow
 
-The stack follows a **Three-Tier Architecture** for the application runtime, complemented by a dedicated **Operations Plane** for lifecycle management.
+This section describes the internal structure of the stack and is intended for
+users who want to understand, extend, or adapt the system beyond basic usage.
+
+The design follows a **Three-Tier Architecture** for the application runtime, complemented by a dedicated **Operations Plane** for lifecycle management.
 
 ### System Diagram
+
+The diagram below illustrates the high-level relationships between runtime
+services, data persistence, and operational tooling. Solid arrows represent
+runtime dependencies, while dashed arrows indicate operational or administrative
+interactions.
+
 
 ```mermaid
 flowchart TB
@@ -254,6 +276,9 @@ Some design choices are intentionally opinionated to favor maintainability:
 
 - **Configuration as data**  
   All behavior is driven by environment variables, keeping scripts generic and reusable.
+
+These decisions directly support the workflows described earlier and aim to keep
+the system predictable as complexity grows.
 
 ## Quality Gates and CI
 
