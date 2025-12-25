@@ -218,7 +218,7 @@ flowchart TB
 
   - **Base Stack (`docker-compose.yml`)**: Orchestrates the essential services for a standalone, automated environment.
 
-  - **Development Overrides (`docker-compose.dev.yml`)**: Injects developer-centric features
+  - **Development Overrides (`docker-compose.dev.yml`)**: Injects developer-centric features.
 
 - **Script-Driven Automation**: All logic resides in POSIX-compliant shell scripts under `scripts/`. This approach decouples automation from container images, making execution order and failure modes explicit and auditable.
 
