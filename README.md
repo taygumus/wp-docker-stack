@@ -225,9 +225,9 @@ flowchart LR
 
     wp-init --> DB
     wp-init --> WordPress
+    wp-cli --> WordPress
 
     db-backup --> DB
-    wp-cli --> WordPress
     db-cli --> DB
 
     DB -->|Volumes| Storage[(Persistent Volumes)]
