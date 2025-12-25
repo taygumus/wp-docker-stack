@@ -175,7 +175,6 @@ services, data persistence, and operational tooling. Solid arrows represent
 runtime dependencies, while dashed arrows indicate operational or administrative
 interactions.
 
-
 ```mermaid
 flowchart TB
     %% Actors
