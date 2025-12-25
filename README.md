@@ -256,7 +256,7 @@ flowchart TB
 
 | Service | Role | Layer |
 | :--- | :--- | :--- |
-| **Nginx** | Reverse proxy, SSL termination, and static asset handling. | Presentation |
+| **Nginx** | Reverse proxy and static asset handling. | Presentation |
 | **WordPress** | Application logic execution via PHP-FPM. | Application |
 | **Database** | Persistent data storage (MySQL) via named volumes. | Data |
 | **Initialization (`wp-init`)** | Deterministic setup, DB imports, and site URL synchronization. | Ops Plane |
