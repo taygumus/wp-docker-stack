@@ -119,3 +119,167 @@ The `Makefile` provides a stable, minimal interface for common operations:
 * **`make sync-site-url`**: Manually trigger site URL synchronization.
 * **`make db-backup`**: Execute a one-off database backup.
 * **`make db-restore SQLFILE=x.sql`**: Restore a specific dump from the `db/` directory.
+
+## Architecture & Workflow
+
+The stack is organized around a clear separation between application runtime,
+infrastructure orchestration, and automation logic.
+
+Docker Compose is used as the orchestration layer, while all non-trivial
+operations (initialization, migration, synchronization, backups) are delegated
+to explicit, service-scoped shell scripts.
+
+This approach keeps the runtime predictable and avoids hidden behavior inside
+custom images or implicit container side effects.
+
+### Docker Compose Structure
+
+The project is composed of two Compose files:
+
+- `docker-compose.yml`  
+  Defines the core services required to run WordPress:
+  WordPress (PHP), database engine, Nginx, and shared volumes.
+
+- `docker-compose.dev.yml`  
+  Extends the base stack with development and operational tooling such as:
+  initialization services, backup automation, CLI containers, and optional
+  database management interfaces.
+
+This layered approach allows the base stack to remain minimal, while enabling
+additional functionality without modifying the core runtime definition.
+
+### Service Responsibilities
+
+Each container has a narrowly defined responsibility:
+
+- **WordPress / Nginx**  
+  Handle application runtime and HTTP traffic only.
+
+- **Database service**  
+  Provides persistent data storage via named volumes.
+
+- **Initialization service (`wp-init`)**  
+  Executes one-time or repeatable initialization tasks:
+  database imports, site URL detection, and URL synchronization.
+
+- **Data Safety (`db-backup`)**  
+  Performs periodic database snapshots with a FIFO rotation policy.
+
+- **CLI services (`wp-cli`, `db-cli`)**  
+  Provide an always-available operational interface for manual maintenance
+  and are reused internally by automation tasks.
+
+Services communicate exclusively through Docker networks and volumes.
+No container embeds logic that belongs to another lifecycle phase.
+
+### Script-Driven Automation
+
+All automation logic lives under the `scripts/` directory and is structured
+by functional domain.
+
+Each subdirectory maps directly to a service or shared concern, making the
+relationship between containers and scripts explicit:
+
+- service-specific logic is colocated with the service that executes it
+- shared functionality (e.g. DB readiness checks, interval parsing) is
+  extracted into reusable utilities
+
+Scripts are POSIX-compliant, composable, and designed to be readable and
+auditable. This makes execution order, side effects, and failure modes explicit.
+
+### Workflow Overview
+
+A typical workflow follows these steps:
+
+1. Containers are started via `make up`.
+2. Core services become available (database, WordPress, Nginx).
+3. Optional initialization services run deterministic setup tasks.
+4. Long-running automation (e.g. backups) operates independently.
+5. Manual operations are performed via Make targets or CLI containers.
+
+Each phase is isolated, repeatable, and observable, which simplifies debugging
+and future extension.
+
+### Extensibility
+
+The architecture is intentionally open for extension:
+
+- new initialization tasks can be added to `wp-init`
+- additional automation services can be introduced without altering the core
+  stack
+- production-oriented overrides can be layered on top of the existing Compose
+  files
+
+This makes the project suitable both as a local development environment and as
+a foundation for more advanced deployment scenarios.
+
+## High-Level Architecture
+
+The following diagram provides a conceptual overview of how services interact
+within the stack.
+
+```mermaid
+flowchart LR
+    User --> Nginx --> WordPress
+    WordPress --> DB[(Database)]
+
+    wp-init --> DB
+    wp-init --> WordPress
+
+    db-backup --> DB
+    wp-cli --> WordPress
+    db-cli --> DB
+
+    DB -->|Volumes| Storage[(Persistent Volumes)]
+
+## Design Decisions
+
+Some design choices are intentionally opinionated and aimed at long-term
+maintainability rather than short-term convenience:
+
+- **Explicit automation over implicit behavior**  
+  Initialization, migration, and backup logic are implemented as explicit
+  scripts instead of being hidden inside container images or entrypoints.
+
+- **Separation of lifecycle phases**  
+  Runtime services, initialization tasks, and operational tooling are isolated
+  into dedicated containers to avoid cross-responsibility coupling.
+
+- **Configuration as data**  
+  All behavioral changes are driven by environment variables, keeping scripts
+  generic and reusable across environments.
+
+These decisions favor clarity, debuggability, and extensibility over abstraction defaults.
+
+## Quality Gates and CI
+
+To preserve consistency and prevent configuration drift, the repository
+includes a lightweight CI pipeline executed via GitHub Actions.
+
+Each change is automatically validated against the following checks:
+
+- **Shell scripts**  
+  Linted using `shellcheck` to enforce correctness and portability.
+
+- **Docker Compose and YAML files**  
+  Validated for syntax and structural correctness.
+
+- **Makefile targets**  
+  Checked for consistency and common pitfalls.
+
+- **Markdown documentation**  
+  Optionally linted to enforce formatting and readability standards.
+
+This ensures that infrastructure code, automation scripts, and documentation
+evolve together in a controlled and reviewable way.
+
+## Contributions
+
+Contributions, improvements, and discussions are welcome.
+
+The project is structured to make extension straightforward, whether by adding
+new automation steps, introducing additional services, or adapting the stack
+for different environments.
+
+Pull requests are expected to follow the existing conventions and pass the
+automated checks defined in the CI pipeline.
