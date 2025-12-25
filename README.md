@@ -150,7 +150,7 @@ The `Makefile` provides a stable, minimal interface for common operations:
 
 ## Architecture & Workflow
 
-The stack implements a **Three-Tier Architecture**, strictly separating the presentation, application, and data layers from the operations plane.
+The stack follows a **Three-Tier Architecture** for the application runtime, complemented by a dedicated **Operations Plane** for lifecycle management.
 
 ### System Diagram
 
@@ -214,10 +214,11 @@ flowchart TB
 
 - **Sidecar Pattern**: Operations like initialization and backups run in dedicated, ephemeral containers. This ensures the application runtime remains immutable, secure, and focused solely on serving traffic.
 
-- **Layered Composition**: The environment is split between two logical planes:
-  - `docker-compose.yml`: Defines the **Core Runtime** (Nginx, WordPress, Database).
+- **Layered Composition**: The environment is managed through a layered configuration to separate runtime concerns from development needs:
 
-  - `docker-compose.dev.yml`: Extends the stack with the **Ops Plane** (Init services, Backups, and CLI tools).
+  - **Base Stack (`docker-compose.yml`)**: Orchestrates the essential services for a standalone, automated environment.
+
+  - **Development Overrides (`docker-compose.dev.yml`)**: Injects developer-centric features
 
 - **Script-Driven Automation**: All logic resides in POSIX-compliant shell scripts under `scripts/`. This approach decouples automation from container images, making execution order and failure modes explicit and auditable.
 
