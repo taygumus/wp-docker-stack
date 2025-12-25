@@ -70,8 +70,8 @@ make up
 
 ### Access the services
 
-* **WordPress:** Accessible at `http://<SERVER_NAME>:<HTTP_PORT>` as configured in your `.env` file.
-* **Database Management:** Available via the database CLI (`db-cli`) or optional GUI tools such as phpMyAdmin.
+- **WordPress:** Accessible at `http://<SERVER_NAME>:<HTTP_PORT>` as configured in your `.env` file.
+- **Database Management:** Available via the database CLI (`db-cli`) or optional GUI tools such as phpMyAdmin.
 
 
 ### Stop the stack
