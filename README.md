@@ -73,7 +73,6 @@ make up
 - **WordPress:** Accessible at `http://<SERVER_NAME>:<HTTP_PORT>` as configured in your `.env` file.
 - **Database Management:** Available via the database CLI (`db-cli`) or optional GUI tools such as phpMyAdmin.
 
-
 ### Stop the stack
 
 Gracefully shut down all running services:
@@ -87,24 +86,29 @@ make down
 The stack is driven by environment variables defined in the `.env` file. This approach keeps configuration explicit and avoids hardcoded values inside scripts or compose files.
 
 ### 1. Core Stack Settings
+
 | Variable | Description |
+
 | :--- | :--- |
 | `CONTAINER_NAME` | Prefix used for all containers in the stack (e.g., `app`). |
 | `SERVER_NAME` | Domain or hostname for the application (e.g., `localhost`). |
 | `HTTP_PORT` | Host port mapped to the Nginx entry point (e.g., `8000`). |
 
 ### 2. Database Configuration
+
 Configures the MySQL/MariaDB instance used by both the DB engine and WordPress.
 * `DATABASE_NAME`, `DATABASE_USER`, `DATABASE_PASSWORD`
 * `DATABASE_ROOT_PASSWORD`: Required for administrative tasks and CLI operations.
 
 ### 3. WordPress Initialization
+
 Handles the automated setup and URL synchronization to ensure the site is always reachable.
 * `SKIP_WP_INIT`: Set to `true` to disable the initialization service during `make up`.
 * `SITE_URL`: The target WordPress URL. Supports dynamic expansion (e.g., `http://${SERVER_NAME}:${HTTP_PORT}`).
 * `SKIP_COLUMNS`: Columns to exclude during the automated `search-replace` process (default: `guid`).
 
 ### 4. Database Backup Service
+
 Manages automated snapshots and implements a data safety policy.
 * `SKIP_DB_BACKUP`: Set to `true` to disable the automated backup service during `make up`.
 * `DATABASE_BACKUP_MAX_FILES`: Number of historical snapshots to keep (**FIFO rotation policy**).
@@ -112,6 +116,7 @@ Manages automated snapshots and implements a data safety policy.
 * `DATABASE_BACKUP_INTERVAL`: Frequency of subsequent backups.
 
 ### 5. Management Tools (Optional)
+
 * `PHPMYADMIN_PORT`: Host port for the optional phpMyAdmin web interface.
 
 ## Operational Interface
