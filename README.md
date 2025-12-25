@@ -302,29 +302,20 @@ a foundation for more advanced deployment scenarios.
 
 ## Design Decisions
 
-Some design choices are intentionally opinionated and aimed at long-term
-maintainability rather than short-term convenience:
+Some design choices are intentionally opinionated to favor maintainability:
 
 - **Explicit automation over implicit behavior**  
-  Initialization, migration, and backup logic are implemented as explicit
-  scripts instead of being hidden inside container images or entrypoints.
+  Initialization and migration logic is explicit in scripts, avoiding hidden behavior in entrypoints.
 
 - **Separation of lifecycle phases**  
-  Runtime services, initialization tasks, and operational tooling are isolated
-  into dedicated containers to avoid cross-responsibility coupling.
+  Runtime services and operational tooling are isolated to prevent cross-responsibility coupling.
 
 - **Configuration as data**  
-  All behavioral changes are driven by environment variables, keeping scripts
-  generic and reusable across environments.
-
-These decisions favor clarity, debuggability, and extensibility over abstraction defaults.
+  All behavior is driven by environment variables, keeping scripts generic and reusable.
 
 ## Quality Gates and CI
 
-To preserve consistency and prevent configuration drift, the repository
-includes a lightweight CI pipeline executed via GitHub Actions.
-
-Each change is automatically validated against the following checks:
+To preserve consistency, the repository includes a CI pipeline (GitHub Actions) that validates:
 
 - **Shell scripts**  
   Linted to enforce correctness and portability.
@@ -338,16 +329,6 @@ Each change is automatically validated against the following checks:
 - **Markdown documentation**  
   Optionally linted to enforce formatting and readability standards.
 
-This ensures that infrastructure code, automation scripts, and documentation
-evolve together in a controlled and reviewable way.
-
 ## Contributions
 
-Contributions, improvements, and discussions are welcome.
-
-The project is structured to make extension straightforward, whether by adding
-new automation steps, introducing additional services, or adapting the stack
-for different environments.
-
-Pull requests are expected to follow the existing conventions and pass the
-automated checks defined in the CI pipeline.
+Contributions are welcome. Please ensure changes pass the CI pipeline and follow the established architectural patterns.
