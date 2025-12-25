@@ -156,22 +156,26 @@ The stack follows a **Three-Tier Architecture** for the application runtime, com
 
 ```mermaid
 flowchart TB
+    %% Actors
     Visitor((Visitor))
     Operator((Operator))
 
     %% Presentation Layer
     subgraph Edge [Presentation Layer]
+        direction TB
         Nginx[Nginx]
         PMA[phpMyAdmin]
     end
 
     %% Application Layer
     subgraph App [Application Layer]
+        direction TB
         WP[WordPress]
     end
 
     %% Data Layer
     subgraph Data [Data Layer]
+        direction TB
         DB[(Database)]
         V_DB[(dbdata volume)]
         V_WP[(wordpress volume)]
@@ -179,32 +183,37 @@ flowchart TB
 
     %% Operations Plane
     subgraph Ops [Operations Plane]
+        direction TB
         WP_INIT[wp-init]
         DB_BACKUP[db-backup]
         WP_CLI[wp-cli]
         DB_CLI[db-cli]
     end
 
-    %% User interactions
+    %% Visitor flow (runtime)
     Visitor --> Nginx
-    Operator -.-> Ops
-    Operator -.-> PMA
-
-    %% Runtime flow
     Nginx --> WP
     WP --> DB
+
+    %% Persistence
+    DB --- V_DB
+    WP --- V_WP
 
     %% Presentation dependencies
     PMA -.-> DB
 
-    %% Persistence
-    DB --- V_DB
-    WP --> V_WP
-    WP_INIT --> V_WP
+    %% Operator interactions
+    Operator -.-> PMA
+    Operator -.-> WP_CLI
+    Operator -.-> DB_CLI
+    Operator -.-> WP_INIT
+    Operator -.-> DB_BACKUP
 
     %% Operations interactions
     WP_INIT --> WP
     WP_INIT --> DB
+    WP_INIT --- V_WP
+
     DB_BACKUP --> DB
     WP_CLI -.-> WP
     DB_CLI -.-> DB
