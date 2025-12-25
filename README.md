@@ -1,13 +1,5 @@
 # WordPress Docker Stack
 
-## Overview
-
-A Docker Compose–based WordPress environment focused on automation, reproducibility, and separation of concerns.
-
-This repository provides a structured and repeatable way to run and manage WordPress using containers. The stack relies on explicit configuration, script-driven automation, and a clear boundary between application logic and infrastructure responsibilities.
-
-The objective is to offer a deterministic and extensible environment suitable for both straightforward WordPress setups and for more advanced development, migration, and data safety scenarios.
-
 ## Contents
 
 - [Overview](#overview)
@@ -19,6 +11,14 @@ The objective is to offer a deterministic and extensible environment suitable fo
 - [Design Decisions](#design-decisions)
 - [Quality Gates and CI](#quality-gates-and-ci)
 - [Contributions](#contributions)
+
+## Overview
+
+A Docker Compose–based WordPress environment focused on automation, reproducibility, and separation of concerns.
+
+This repository provides a structured and repeatable way to run and manage WordPress using containers. The stack relies on explicit configuration, script-driven automation, and a clear boundary between application logic and infrastructure responsibilities.
+
+The objective is to offer a deterministic and extensible environment suitable for both straightforward WordPress setups and for more advanced development, migration, and data safety scenarios.
 
 ## Typical Use Cases
 
@@ -100,19 +100,19 @@ Configures the MySQL/MariaDB instance used by both the DB engine and WordPress.
 
 ### 3. WordPress Initialization
 Handles the automated setup and URL synchronization to ensure the site is always reachable.
-* **`SKIP_WP_INIT`**: Set to `true` to disable the initialization service during `make up`.
-* **`SITE_URL`**: The target WordPress URL. Supports dynamic expansion (e.g., `http://${SERVER_NAME}:${HTTP_PORT}`).
-* **`SKIP_COLUMNS`**: Columns to exclude during the automated `search-replace` process (default: `guid`).
+* `SKIP_WP_INIT`: Set to `true` to disable the initialization service during `make up`.
+* `SITE_URL`: The target WordPress URL. Supports dynamic expansion (e.g., `http://${SERVER_NAME}:${HTTP_PORT}`).
+* `SKIP_COLUMNS`: Columns to exclude during the automated `search-replace` process (default: `guid`).
 
 ### 4. Database Backup Service
 Manages automated snapshots and implements a data safety policy.
-* **`SKIP_DB_BACKUP`**: Set to `true` to disable the automated backup service during `make up`.
-* **`DATABASE_BACKUP_MAX_FILES`**: Number of historical snapshots to keep (**FIFO rotation policy**).
-* **`DATABASE_BACKUP_INITIAL_DELAY`**: Wait time before the first backup (supports `s/m/h/d`, e.g., `60s`).
-* **`DATABASE_BACKUP_INTERVAL`**: Frequency of subsequent backups.
+* `SKIP_DB_BACKUP`: Set to `true` to disable the automated backup service during `make up`.
+* `DATABASE_BACKUP_MAX_FILES`: Number of historical snapshots to keep (**FIFO rotation policy**).
+* `DATABASE_BACKUP_INITIAL_DELAY`: Wait time before the first backup (supports `s/m/h/d`, e.g., `60s`).
+* `DATABASE_BACKUP_INTERVAL`: Frequency of subsequent backups.
 
 ### 5. Management Tools (Optional)
-* **`PHPMYADMIN_PORT`**: Host port for the optional phpMyAdmin web interface.
+* `PHPMYADMIN_PORT`: Host port for the optional phpMyAdmin web interface.
 
 ## Operational Interface
 
@@ -128,9 +128,9 @@ The `Makefile` provides a stable, minimal interface for common operations:
 | `make logs` | Stream real-time logs from all containers. |
 
 ### Specialized Tasks
-* **`make sync-site-url`**: Manually trigger site URL synchronization.
-* **`make db-backup`**: Execute a one-off database backup.
-* **`make db-restore SQLFILE=x.sql`**: Restore a specific dump from the `db/` directory.
+* `make sync-site-url`: Manually trigger site URL synchronization.
+* `make db-backup`: Execute a one-off database backup.
+* `make db-restore SQLFILE=x.sql`: Restore a specific dump from the `db/` directory.
 
 ## Architecture & Workflow
 
@@ -151,37 +151,53 @@ within the stack.
 
 ```mermaid
 flowchart TB
-    User((User))
+    Visitor((Visitor))
+    Operator((Operator))
 
+    %% Presentation Layer
     subgraph Edge [Presentation Layer]
         Nginx[Nginx]
         PMA[phpMyAdmin]
     end
 
+    %% Application Layer
     subgraph App [Application Layer]
         WP[WordPress]
     end
 
+    %% Data Layer
     subgraph Data [Data Layer]
         DB[(Database)]
-        Vol[(Persistent Volumes)]
+        V_DB[(dbdata volume)]
+        V_WP[(wordpress volume)]
     end
 
-    subgraph Ops [Automation Plane]
+    %% Operations Plane
+    subgraph Ops [Operations Plane]
         WP_INIT[wp-init]
         DB_BACKUP[db-backup]
         WP_CLI[wp-cli]
         DB_CLI[db-cli]
     end
 
-    User --> Nginx
-    User --> PMA
+    %% User interactions
+    Visitor --> Nginx
+    Operator -.-> Ops
+    Operator -.-> PMA
 
+    %% Runtime flow
     Nginx --> WP
     WP --> DB
-    DB --- Vol
+
+    %% Presentation dependencies
     PMA -.-> DB
 
+    %% Persistence
+    DB --- V_DB
+    WP --- V_WP
+    WP_INIT --- V_WP
+
+    %% Operations interactions
     WP_INIT --> WP
     WP_INIT --> DB
     DB_BACKUP --> DB
@@ -297,7 +313,7 @@ includes a lightweight CI pipeline executed via GitHub Actions.
 Each change is automatically validated against the following checks:
 
 - **Shell scripts**  
-  Linted using `shellcheck` to enforce correctness and portability.
+  Linted to enforce correctness and portability.
 
 - **Docker Compose and YAML files**  
   Validated for syntax and structural correctness.
