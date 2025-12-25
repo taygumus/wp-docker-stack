@@ -220,17 +220,28 @@ within the stack.
 
 ```mermaid
 flowchart LR
-    User --> Nginx --> WordPress
-    WordPress --> DB[(Database)]
+    User((User)) --> Nginx
+    User --> PMA[phpMyAdmin]
+    
+    subgraph App [Application Runtime]
+        Nginx --> WP[WordPress]
+    end
 
-    wp-init --> DB
-    wp-init --> WordPress
-    wp-cli --> WordPress
+    subgraph Data [Storage Layer]
+        WP --> DB[(Database)]
+        DB --- Vol[(Persistent Volumes)]
+        PMA -.-> DB
+    end
 
-    db-backup --> DB
-    db-cli --> DB
+    subgraph Automation [Automation & Tools]
+        WP_INIT[wp-init] --> WP
+        WP_INIT --> DB
+        DB_BACKUP[db-backup] --> DB
+        WP_CLI[wp-cli] -.-> WP
+        DB_CLI[db-cli] -.-> DB
+    end
 
-    DB -->|Volumes| Storage[(Persistent Volumes)]
+    style Automation fill:#646464,stroke:#333
 ```
 
 ## Design Decisions
