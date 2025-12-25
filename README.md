@@ -150,8 +150,6 @@ The `Makefile` provides a stable, minimal interface for common operations:
 
 ## Architecture & Workflow
 
-### High-Level Architecture
-
 The following diagram provides a conceptual overview of how services interact
 within the stack.
 
@@ -201,7 +199,7 @@ flowchart TB
     %% Persistence
     DB --- V_DB
     WP --- V_WP
-    WP_INIT --- V_WP
+    WP_INIT --> V_WP
 
     %% Operations interactions
     WP_INIT --> WP
