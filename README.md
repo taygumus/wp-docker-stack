@@ -299,7 +299,7 @@ To preserve consistency, the repository includes a CI pipeline (GitHub Actions) 
 ## Extensibility
 
 The stack is intentionally focused on development and operational workflows,
-but its structure is designed to support future extensions.
+while its structure is designed to support future extensions.
 
 Additional Docker Compose layers (e.g. production-specific overrides) can be
 introduced to adapt runtime configuration, persistence, and networking concerns
