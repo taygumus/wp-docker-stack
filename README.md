@@ -309,4 +309,5 @@ This approach allows the project to evolve incrementally as requirements grow.
 
 ## Contributions
 
-Contributions are warmly welcomed and your input would be highly appreciated. Please ensure changes pass the CI pipeline and follow the established architectural patterns.
+Contributions are welcome. Please ensure that all changes pass the CI pipeline
+and follow the established architectural patterns.
