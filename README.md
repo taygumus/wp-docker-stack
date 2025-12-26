@@ -10,6 +10,7 @@
 - [Architecture & Workflow](#architecture--workflow)
 - [Design Decisions](#design-decisions)
 - [Quality Gates and CI](#quality-gates-and-ci)
+- [Extensibility](#extensibility)
 - [Contributions](#contributions)
 
 ## Overview
