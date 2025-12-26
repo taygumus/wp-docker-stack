@@ -259,7 +259,7 @@ flowchart TB
 | **Nginx** | Reverse proxy and static asset handling. | Presentation |
 | **WordPress** | Application logic execution via PHP-FPM. | Application |
 | **Database** | Persistent data storage (MySQL) via named volumes. | Data |
-| **Initialization (`wp-init`)** | Deterministic setup, DB imports, and site URL synchronization. | Ops Plane |
+| **Initialization (`wp-init`)** | One-shot site URL detection and synchronization using wp-cli. | Ops Plane |
 | **Data Safety (`db-backup`)** | Automated snapshots and maintenance of the FIFO backup policy. | Ops Plane |
 | **CLIs** | Stateless interfaces for manual maintenance (`wp-cli`, `db-cli`). | Ops Plane |
 
@@ -295,6 +295,17 @@ To preserve consistency, the repository includes a CI pipeline (GitHub Actions) 
 - **Markdown documentation**  
   Optionally linted to enforce formatting and readability standards.
 
+## Extensibility
+
+The stack is intentionally focused on development and operational workflows,
+but its structure is designed to support future extensions.
+
+Additional Docker Compose layers (e.g. production-specific overrides) can be
+introduced to adapt runtime configuration, persistence, and networking concerns
+without modifying the core automation logic.
+
+This approach allows the project to evolve incrementally as requirements grow.
+
 ## Contributions
 
-Contributions are welcome. Please ensure changes pass the CI pipeline and follow the established architectural patterns.
+Contributions are warmly welcomed and your input would be highly appreciated. Please ensure changes pass the CI pipeline and follow the established architectural patterns.
