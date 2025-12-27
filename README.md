@@ -260,7 +260,7 @@ flowchart TB
 | **Nginx** | Reverse proxy and static asset handling. | Presentation |
 | **WordPress** | Application logic execution via PHP-FPM. | Application |
 | **Database** | Persistent data storage (MySQL) via named volumes. | Data |
-| **Initialization (`wp-init`)** | One-shot site URL detection and synchronization using wp-cli. | Ops Plane |
+| **Initialization (`wp-init`)** | One-shot site URL detection and synchronization. | Ops Plane |
 | **Data Safety (`db-backup`)** | Automated snapshots and maintenance of the FIFO backup policy. | Ops Plane |
 | **CLIs** | Stateless interfaces for manual maintenance (`wp-cli`, `db-cli`). | Ops Plane |
 
