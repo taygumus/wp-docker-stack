@@ -1,5 +1,10 @@
 # WordPress Docker Stack
 
+![CI](https://github.com/taygumus/wp-docker-stack/actions/workflows/ci-lint.yml/badge.svg)
+![Version](https://img.shields.io/github/v/tag/taygumus/wp-docker-stack?label=version)
+![Status](https://img.shields.io/badge/status-development-yellow)
+![License](https://img.shields.io/github/license/taygumus/wp-docker-stack)
+
 ## Contents
 
 - [Overview](#overview)
