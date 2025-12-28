@@ -85,6 +85,8 @@ services:
       DB_BACKUP_MAX_FILES: ${DATABASE_BACKUP_MAX_FILES:-3}
       DB_BACKUP_INITIAL_DELAY: ${DATABASE_BACKUP_INITIAL_DELAY:-60}
       DB_BACKUP_INTERVAL: ${DATABASE_BACKUP_INTERVAL:-3600}
+    tmpfs:
+      - /var/lib/mysql
     networks:
       - internal
 
