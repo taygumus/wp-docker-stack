@@ -63,6 +63,7 @@ services:
       - ./scripts:/scripts:ro
     networks:
       - internal
+    entrypoint: ["tail", "-f", "/dev/null"]
 
   phpmyadmin:
     depends_on:
