@@ -41,8 +41,5 @@ down-prod:
 logs-prod:
 	@$(COMPOSE_PROD) logs -f
 
-wp-init-prod:
-	@$(COMPOSE_PROD) run --rm wp-init
-
 .PHONY: up down clean reset logs sync-site-url db-backup db-restore \
-        up-prod down-prod logs-prod wp-init-prod 
+        up-prod down-prod logs-prod 
