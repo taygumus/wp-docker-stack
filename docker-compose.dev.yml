@@ -9,6 +9,7 @@ services:
 
   nginx:
     volumes:
+      - ./nginx/dev.conf.template:/etc/nginx/templates/default.conf.template:ro
       - ./src:/var/www/html/wp-content:rw
 
   wp-init:
