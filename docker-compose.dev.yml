@@ -5,6 +5,7 @@ services:
 
   wordpress:
     volumes:
+      - ./php/zz-dev.ini:/usr/local/etc/php/conf.d/zz-dev.ini:ro
       - ./src:/var/www/html/wp-content:rw
 
   nginx:

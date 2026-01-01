@@ -15,6 +15,8 @@ services:
         define('WP_ENVIRONMENT_TYPE', 'production');
         define('DISALLOW_FILE_EDIT', true);
         define('DISALLOW_FILE_MODS', true);
+    volumes:
+      - ./php/zz-prod.ini:/usr/local/etc/php/conf.d/zz-prod.ini:ro
     read_only: true
     tmpfs:
       - /tmp
