@@ -46,8 +46,6 @@ services:
     env_file: .env
     environment:
       - SERVER_NAME=${SERVER_NAME}
-    ports:
-      - "${HTTP_PORT:-8000}:80"
     volumes:
       - wordpress:/var/www/html
     networks:

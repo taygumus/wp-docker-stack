@@ -1,9 +1,9 @@
 COMPOSE_DEV  := docker compose -f docker-compose.yml -f docker-compose.dev.yml
 COMPOSE_PROD := docker compose -f docker-compose.yml -f docker-compose.prod.yml
 
-# =====================
-# === DEV TARGETS ====
-# =====================
+# --------------------------------------------------
+# Development targets
+# --------------------------------------------------
 
 up:
 	@$(COMPOSE_DEV) up -d --build
@@ -28,9 +28,9 @@ db-backup:
 db-restore:
 	@$(COMPOSE_DEV) exec -T db-cli sh -c "/scripts/db-cli/run-db-restore.sh '$(SQLFILE)'"
 
-# ======================
-# === PROD TARGETS ====
-# ======================
+# --------------------------------------------------
+# Production targets
+# --------------------------------------------------
 
 up-prod:
 	@$(COMPOSE_PROD) up -d
