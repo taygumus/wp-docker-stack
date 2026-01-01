@@ -17,7 +17,6 @@ services:
         define('DISALLOW_FILE_MODS', true);
     volumes:
       - ./php/zz-prod.ini:/usr/local/etc/php/conf.d/zz-prod.ini:ro
-    read_only: true
     tmpfs:
       - /tmp
     deploy:
@@ -41,7 +40,6 @@ services:
   wp-init:
     restart: "no"
     volumes:
-      - wordpress:/var/www/html
       - ./scripts:/scripts:ro
     entrypoint: ["/scripts/wp-init/entrypoint.sh"]
     deploy:
