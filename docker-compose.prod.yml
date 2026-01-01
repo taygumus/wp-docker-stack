@@ -19,6 +19,9 @@ services:
 
   wordpress:
     <<: *default-logging
+    init: true
+    security_opt:
+      - no-new-privileges:true
     environment:
       WORDPRESS_CONFIG_EXTRA: |
         define('WP_ENVIRONMENT_TYPE', 'production');
@@ -36,6 +39,9 @@ services:
 
   nginx:
     <<: *default-logging
+    init: true
+    security_opt:
+      - no-new-privileges:true
     ports:
       - "80:80" #
       - "443:443"
