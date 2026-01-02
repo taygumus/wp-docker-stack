@@ -4,7 +4,11 @@ server {
 
     root /var/www/html;
     index index.php index.html;
-    
+
+    add_header X-Frame-Options "SAMEORIGIN";
+    add_header X-Content-Type-Options "nosniff";
+    add_header X-XSS-Protection "1; mode=block";
+
     location / {
         try_files $uri $uri/ /index.php?$args;
     }
@@ -24,8 +28,4 @@ server {
     location ~ /\.ht {
         deny all;
     }
-
-    add_header X-Frame-Options "SAMEORIGIN";
-    add_header X-Content-Type-Options "nosniff";
-    add_header X-XSS-Protection "1; mode=block";
 }
