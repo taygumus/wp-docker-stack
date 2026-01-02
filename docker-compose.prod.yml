@@ -85,6 +85,8 @@ services:
     image: certbot/certbot:v5.2.2
     container_name: ${CONTAINER_NAME}-certbot
     restart: unless-stopped
+    tmpfs:
+      - /var/lib/letsencrypt
     volumes:
       - ./scripts:/scripts:ro
       - certbot_conf:/etc/letsencrypt

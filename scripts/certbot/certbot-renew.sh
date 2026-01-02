@@ -19,6 +19,6 @@ while true; do
     echo "[$(date)] Renewal failed"
   fi
 
-  echo "[$(date)] Next check in ${CERTBOT_RENEW_INTERVAL}"
+  echo "[$(date)] Waiting ${CERTBOT_RENEW_INTERVAL} for next check..."
   sleep "${CERTBOT_RENEW_INTERVAL}"
 done
