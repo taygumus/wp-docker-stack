@@ -1,0 +1,107 @@
+x-logging: &default-logging
+  logging:
+    driver: json-file
+    options:
+      max-size: "${LOG_SIZE:-10m}"
+      max-file: "${LOG_FILES:-3}"
+
+services:
+  database:
+    <<: *default-logging
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    deploy:
+      resources:
+        limits:
+          cpus: '${DB_CPUS:-1.0}'
+          memory: ${DB_MEM_LIMIT:-1024M}
+
+  wordpress:
+    <<: *default-logging
+    init: true
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      WORDPRESS_CONFIG_EXTRA: |
+        define('WP_ENVIRONMENT_TYPE', 'production');
+        define('DISALLOW_FILE_EDIT', true);
+        define('DISALLOW_FILE_MODS', true);
+    volumes:
+      - ./php/zz-prod.ini:/usr/local/etc/php/conf.d/zz-prod.ini:ro
+    tmpfs:
+      - /tmp
+    deploy:
+      resources:
+        limits:
+          cpus: '${WP_CPUS:-1.0}'
+          memory: ${WP_MEM_LIMIT:-512M}
+
+  nginx:
+    <<: *default-logging
+    init: true
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/prod.conf.template:/etc/nginx/templates/default.conf.template:ro
+      - certbot_conf:/etc/letsencrypt
+      - certbot_www:/var/www/certbot
+    deploy:
+      resources:
+        limits:
+          cpus: '${NGINX_CPUS:-0.5}'
+          memory: ${NGINX_MEM_LIMIT:-128M}
+
+  wp-init:
+    <<: *default-logging
+    restart: "no"
+    volumes:
+      - ./scripts:/scripts:ro
+    entrypoint: ["/scripts/wp-init/entrypoint.sh"]
+    deploy:
+      resources:
+        limits:
+          cpus: '${WP_INIT_CPUS:-0.5}'
+          memory: ${WP_INIT_MEM_LIMIT:-128M}
+
+  db-backup:
+    <<: *default-logging
+    restart: unless-stopped
+    volumes:
+      - ./scripts:/scripts:ro
+      - db_backups:/backups
+    entrypoint: ["/scripts/db-backup/entrypoint.sh"]
+    deploy:
+      resources:
+        limits:
+          cpus: '${DB_BACKUP_CPUS:-0.5}'
+          memory: ${DB_BACKUP_MEM_LIMIT:-256M}
+
+  certbot:
+    <<: *default-logging
+    image: certbot/certbot:v5.2.2
+    container_name: ${CONTAINER_NAME}-certbot
+    env_file: .env
+    environment:
+      SERVER_NAME: ${SERVER_NAME}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
+      CERTBOT_RENEW_INTERVAL: ${CERTBOT_RENEW_INTERVAL:-12h}
+    tmpfs:
+      - /var/lib/letsencrypt
+    volumes:
+      - ./scripts:/scripts:ro
+      - certbot_conf:/etc/letsencrypt
+      - certbot_www:/var/www/certbot
+    deploy:
+      resources:
+        limits:
+          cpus: '${CERTBOT_CPUS:-0.5}'
+          memory: ${CERTBOT_MEM_LIMIT:-128M}
+
+volumes:
+  db_backups:
+  certbot_conf:
+  certbot_www:

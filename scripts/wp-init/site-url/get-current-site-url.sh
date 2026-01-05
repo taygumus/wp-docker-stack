@@ -3,6 +3,7 @@ set -e
 
 . /scripts/wp-cli/check-wp-path.sh
 . /scripts/wp-cli/check-wp-cli.sh
+. /scripts/wp-cli/check-wp-installed.sh
 . /scripts/db-common/wait-for-db.sh
 
 check_wp_path
@@ -10,6 +11,7 @@ check_wp_cli
 
 # shellcheck disable=SC2119
 wait_for_db
+check_wp_installed || exit 0
 
 CURRENT_SITE_URL=$(wp option get siteurl --allow-root 2>/dev/null || true)
 

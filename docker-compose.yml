@@ -16,7 +16,7 @@ services:
       timeout: 30s
       retries: 10
     volumes:
-      - dbdata:/var/lib/mysql
+      - db_data:/var/lib/mysql
     networks:
       - internal
 
@@ -46,10 +46,7 @@ services:
     env_file: .env
     environment:
       - SERVER_NAME=${SERVER_NAME}
-    ports:
-      - "${HTTP_PORT:-8000}:80"
     volumes:
-      - ./nginx:/etc/nginx/templates:ro
       - wordpress:/var/www/html
     networks:
       - internal
@@ -91,7 +88,7 @@ services:
       - internal
 
 volumes:
-  dbdata:
+  db_data:
   wordpress:
 
 networks:

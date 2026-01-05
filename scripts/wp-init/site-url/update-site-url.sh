@@ -4,6 +4,7 @@ set -e
 . /scripts/utils/check-required-vars.sh
 . /scripts/wp-cli/check-wp-path.sh
 . /scripts/wp-cli/check-wp-cli.sh
+. /scripts/wp-cli/check-wp-installed.sh
 . /scripts/db-common/wait-for-db.sh
 
 check_required_vars "CURRENT_SITE_URL SITE_URL"
@@ -13,6 +14,7 @@ check_wp_cli
 
 # shellcheck disable=SC2119
 wait_for_db
+check_wp_installed || exit 0
 
 echo "Starting site URL update: ${CURRENT_SITE_URL} → ${SITE_URL}"
 
