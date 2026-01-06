@@ -12,5 +12,4 @@ check_wp_installed() {
 
   export WP_INSTALLED_READY=true
   echo "WordPress database is available"
-  return 0
 }

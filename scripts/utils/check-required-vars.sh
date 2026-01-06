@@ -1,11 +1,18 @@
 #!/bin/sh
 
 check_required_vars() {
-  REQUIRED_VARS="$1"
-  for VAR in $REQUIRED_VARS; do
-    if [ -z "$(eval echo \$"$VAR")" ]; then
+  for VAR in $1; do
+    case "$VAR" in
+      *[!a-zA-Z0-9_]*)
+        echo "Error: invalid variable name: $VAR"
+        return 1
+        ;;
+    esac
+
+    eval "val=\${$VAR}"
+    [ -n "$val" ] || {
       echo "Error: missing required variable: $VAR"
-      exit 1
-    fi
+      return 1
+    }
   done
 }
