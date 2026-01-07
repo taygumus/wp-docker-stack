@@ -20,9 +20,9 @@ echo "Initial delay: $(format_interval "$BACKUP_INITIAL_DELAY_SEC")"
 sleep "$BACKUP_INITIAL_DELAY_SEC"
 
 while true; do
-    do_backup "$DB_NAME" "$BACKUP_DIR"
-    rotate_backups "$BACKUP_DIR" "$BACKUP_MAX_FILES"
+  do_backup "$DB_NAME" "$BACKUP_DIR"
+  rotate_backups "$BACKUP_DIR" "$BACKUP_MAX_FILES"
 
-    echo "Waiting $(format_interval "$BACKUP_INTERVAL_SEC") until next backup..."
-    sleep "$BACKUP_INTERVAL_SEC"
+  echo "Waiting $(format_interval "$BACKUP_INTERVAL_SEC") until next backup..."
+  sleep "$BACKUP_INTERVAL_SEC"
 done
