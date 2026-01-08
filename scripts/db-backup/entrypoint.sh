@@ -7,7 +7,7 @@ if [ "${SKIP_DB_BACKUP}" = "true" ]; then
 fi
 
 if [ ! -x /scripts/db-backup/run-db-backup-periodic.sh ]; then
-  echo "Error: run-db-backup-periodic.sh not found or not executable"
+  echo "Error: run-db-backup-periodic.sh not found or not executable" >&2
   exit 1
 fi
 

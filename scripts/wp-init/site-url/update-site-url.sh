@@ -35,6 +35,6 @@ if wp search-replace "$CURRENT_SITE_URL" "$SITE_URL" \
   --allow-root; then
   echo "Site URL update completed successfully"
 else
-  echo "Error: WP-CLI command failed"
+  echo "Error: WP-CLI command failed" >&2
   exit 1
 fi

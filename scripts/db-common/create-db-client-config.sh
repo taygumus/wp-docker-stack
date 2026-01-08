@@ -1,16 +1,12 @@
 #!/bin/sh
 
-. /scripts/utils/check-required-vars.sh
-
 create_db_client_config() {
-    _db_host="${1:-database}"
-    _db_port="${2:-3306}"
-    _db_user="${3}"
-    _db_password="${4}"
+  _db_host="${1:-database}"
+  _db_port="${2:-3306}"
+  _db_user="${3}"
+  _db_password="${4}"
 
-    check_required_vars "_db_user _db_password"
-
-    cat > /root/.my.cnf <<EOF
+  cat > /root/.my.cnf <<EOF
 [client]
 host=${_db_host}
 port=${_db_port}
@@ -18,6 +14,6 @@ user=${_db_user}
 password=${_db_password}
 EOF
 
-    chmod 600 /root/.my.cnf
-    echo "Created /root/.my.cnf"
+  chmod 600 /root/.my.cnf
+  echo "Created /root/.my.cnf"
 }

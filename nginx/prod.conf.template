@@ -1,56 +1,56 @@
 server {
-    listen 80;
-    server_name ${SERVER_NAME};
+  listen 80;
+  server_name ${SERVER_NAME};
 
-    location /.well-known/acme-challenge/ {
-        root /var/www/certbot;
-    }
+  location /.well-known/acme-challenge/ {
+    root /var/www/certbot;
+  }
 
-    location / {
-        return 301 https://$host$request_uri;
-    }
+  location / {
+    return 301 https://$host$request_uri;
+  }
 }
 
 server {
-    listen 443 ssl;
-    http2 on;
-    server_name ${SERVER_NAME};
+  listen 443 ssl;
+  http2 on;
+  server_name ${SERVER_NAME};
 
-    root /var/www/html;
-    index index.php;
+  root /var/www/html;
+  index index.php;
 
-    ssl_certificate /etc/letsencrypt/live/${SERVER_NAME}/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/${SERVER_NAME}/privkey.pem;
+  ssl_certificate /etc/letsencrypt/live/${SERVER_NAME}/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/${SERVER_NAME}/privkey.pem;
 
-    ssl_protocols TLSv1.2 TLSv1.3;
-    ssl_prefer_server_ciphers off;
+  ssl_protocols TLSv1.2 TLSv1.3;
+  ssl_prefer_server_ciphers off;
 
-    ssl_session_cache shared:SSL:10m;
-    ssl_session_timeout 10m;
+  ssl_session_cache shared:SSL:10m;
+  ssl_session_timeout 10m;
 
-    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-    add_header X-Content-Type-Options nosniff;
-    add_header X-Frame-Options SAMEORIGIN;
-    add_header X-XSS-Protection "1; mode=block";
-    add_header Referrer-Policy strict-origin-when-cross-origin;
+  add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+  add_header X-Content-Type-Options nosniff;
+  add_header X-Frame-Options SAMEORIGIN;
+  add_header X-XSS-Protection "1; mode=block";
+  add_header Referrer-Policy strict-origin-when-cross-origin;
 
-    location / {
-        try_files $uri $uri/ /index.php?$args;
-    }
+  location / {
+    try_files $uri $uri/ /index.php?$args;
+  }
 
-    location ~ \.php$ {
-        include fastcgi_params;
+  location ~ \.php$ {
+    include fastcgi_params;
 
-        fastcgi_pass wordpress:9000;
-        fastcgi_index index.php;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    fastcgi_pass wordpress:9000;
+    fastcgi_index index.php;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
 
-        fastcgi_buffers 16 16k;
-        fastcgi_buffer_size 32k;
-        fastcgi_read_timeout 60s;
-    }
+    fastcgi_buffers 16 16k;
+    fastcgi_buffer_size 32k;
+    fastcgi_read_timeout 60s;
+  }
 
-    location ~ /\.(?!well-known) {
-        deny all;
-    }
+  location ~ /\.(?!well-known) {
+    deny all;
+  }
 }

@@ -16,7 +16,7 @@ check_wp_installed || exit 0
 CURRENT_SITE_URL=$(wp option get siteurl --allow-root 2>/dev/null || true)
 
 if [ -z "$CURRENT_SITE_URL" ]; then
-  echo "Error: unable to detect current site URL from database"
+  echo "Error: unable to detect current site URL from database" >&2
   exit 1
 fi
 

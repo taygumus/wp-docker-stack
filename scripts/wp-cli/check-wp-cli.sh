@@ -6,8 +6,8 @@ check_wp_cli() {
   fi
 
   if ! command -v wp >/dev/null 2>&1; then
-    echo "Error: WP-CLI is not installed or not in PATH"
-    exit 1
+    echo "Error: WP-CLI is not installed or not in PATH" >&2
+    return 1
   fi
 
   export WP_CLI_READY=true
