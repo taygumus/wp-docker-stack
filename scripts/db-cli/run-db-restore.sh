@@ -6,7 +6,7 @@ set -e
 FILE="$1"
 
 if [ -z "$FILE" ]; then
-  echo "ERROR: No SQL file provided"
+  echo "Error: no SQL file provided" >&2
   exit 1
 fi
 
@@ -14,7 +14,7 @@ BASE="/db/init"
 SQL_PATH="$BASE/$FILE"
 
 if [ ! -f "$SQL_PATH" ]; then
-  echo "ERROR: SQL file not found: $SQL_PATH"
+  echo "Error: SQL file not found: $SQL_PATH" >&2
   exit 1
 fi
 

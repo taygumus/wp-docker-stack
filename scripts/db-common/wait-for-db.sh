@@ -15,7 +15,7 @@ wait_for_db() {
   while ! nc -z "$_db_host" "$_db_port" >/dev/null 2>&1; do
     retries=$((retries - 1))
     if [ "$retries" -le 0 ]; then
-      echo "Error: database not reachable at ${_db_host}:${_db_port}"
+      echo "Error: database not reachable at ${_db_host}:${_db_port}" >&2
       return 1
     fi
     echo "Database not ready, retrying in 3 seconds..."
