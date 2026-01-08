@@ -108,7 +108,6 @@ The stack is driven by environment variables defined in the `.env` file. This ap
 
 | Variable | Description |
 | :--- | :--- |
-| `CONTAINER_NAME` | Prefix used for all containers in the stack (e.g., `app`). |
 | `SERVER_NAME` | Domain or hostname for the application (e.g., `localhost`). |
 | `HTTP_PORT` | Host port mapped to the Nginx entry point (e.g., `8000`). |
 

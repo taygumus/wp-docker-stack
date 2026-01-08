@@ -1,6 +1,5 @@
 services:
   database:
-    container_name: ${CONTAINER_NAME}-database
     image: mysql:8.4.7
     restart: unless-stopped
     env_file: .env
@@ -23,7 +22,6 @@ services:
   wordpress:
     depends_on:
       - database
-    container_name: ${CONTAINER_NAME}-wordpress
     image: wordpress:6.9.0-fpm-alpine
     restart: unless-stopped
     env_file: .env
@@ -40,7 +38,6 @@ services:
   nginx:
     depends_on:
       - wordpress
-    container_name: ${CONTAINER_NAME}-nginx
     image: nginx:1.29.2-alpine
     restart: unless-stopped
     env_file: .env
@@ -55,7 +52,6 @@ services:
     depends_on:
       - wordpress
       - database
-    container_name: ${CONTAINER_NAME}-wp-init
     image: wordpress:cli
     env_file: .env
     environment:
@@ -72,7 +68,6 @@ services:
   db-backup:
     depends_on:
       - database
-    container_name: ${CONTAINER_NAME}-db-backup
     image: mysql:8.4.7
     env_file: .env
     environment:

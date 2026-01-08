@@ -83,7 +83,6 @@ services:
   certbot:
     <<: *default-logging
     image: certbot/certbot:v5.2.2
-    container_name: ${CONTAINER_NAME}-certbot
     env_file: .env
     environment:
       SERVER_NAME: ${SERVER_NAME}
