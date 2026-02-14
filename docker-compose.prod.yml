@@ -42,11 +42,10 @@ services:
     init: true
     security_opt:
       - no-new-privileges:true
-    ports:
-      - "80:80"
-      - "443:443"
     volumes:
       - ./nginx/prod.conf.template:/etc/nginx/templates/default.conf.template:ro
+    networks:
+      - proxy
     deploy:
       resources:
         limits:
@@ -80,3 +79,7 @@ services:
 
 volumes:
   db_backups:
+
+networks:
+  proxy:
+    external: true
