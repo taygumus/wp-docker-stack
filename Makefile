@@ -41,23 +41,5 @@ down-prod:
 logs-prod:
 	@$(COMPOSE_PROD) logs -f
 
-certbot-first-issue:
-	@$(COMPOSE_PROD) run --rm \
-		--entrypoint sh \
-		certbot \
-		/scripts/certbot/certbot-first-issue/certbot-first-issue.sh
-
-certbot-dry-run:
-	@$(COMPOSE_PROD) run --rm \
-		--entrypoint sh \
-		certbot \
-		/scripts/certbot/certbot-dry-run/certbot-dry-run.sh
-
-certbot-renew:
-	@$(COMPOSE_PROD) run --rm \
-		--entrypoint sh \
-		certbot \
-		/scripts/certbot/certbot-renew/certbot-renew.sh
-
 .PHONY: up down clean reset logs sync-site-url db-backup db-restore \
-        up-prod down-prod logs-prod certbot-first-issue certbot-dry-run certbot-renew
+        up-prod down-prod logs-prod
