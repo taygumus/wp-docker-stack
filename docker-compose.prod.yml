@@ -45,7 +45,9 @@ services:
     volumes:
       - ./nginx/prod.conf.template:/etc/nginx/templates/default.conf.template:ro
     networks:
-      - proxy
+      proxy:
+        aliases:
+          - wp-nginx
     deploy:
       resources:
         limits:
