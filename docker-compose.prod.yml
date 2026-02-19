@@ -47,7 +47,7 @@ services:
     networks:
       proxy:
         aliases:
-          - wp-nginx
+          - wp-docker-stack-nginx
     deploy:
       resources:
         limits:
