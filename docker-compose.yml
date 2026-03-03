@@ -1,12 +1,20 @@
+x-mysql-app-env: &mysql-app-env
+  MYSQL_DATABASE: ${DATABASE_NAME}
+  MYSQL_USER: ${DATABASE_USER}
+  MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+
+x-wordpress-db-env: &wordpress-db-env
+  WORDPRESS_DB_HOST: database:3306
+  WORDPRESS_DB_NAME: ${DATABASE_NAME}
+  WORDPRESS_DB_USER: ${DATABASE_USER}
+  WORDPRESS_DB_PASSWORD: ${DATABASE_PASSWORD}
+
 services:
   database:
     image: mysql:8.4.7
     restart: unless-stopped
-    env_file: .env
     environment:
-      MYSQL_DATABASE: ${DATABASE_NAME}
-      MYSQL_USER: ${DATABASE_USER}
-      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+      <<: *mysql-app-env
       MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD}
     healthcheck:
       test:
@@ -24,12 +32,8 @@ services:
       - database
     image: wordpress:6.9.0-fpm-alpine
     restart: unless-stopped
-    env_file: .env
     environment:
-      WORDPRESS_DB_HOST: database:3306
-      WORDPRESS_DB_NAME: ${DATABASE_NAME}
-      WORDPRESS_DB_USER: ${DATABASE_USER}
-      WORDPRESS_DB_PASSWORD: ${DATABASE_PASSWORD}
+      <<: *wordpress-db-env
     volumes:
       - wordpress:/var/www/html
     networks:
@@ -40,7 +44,6 @@ services:
       - wordpress
     image: nginx:1.29.2-alpine
     restart: unless-stopped
-    env_file: .env
     environment:
       - SERVER_NAME=${SERVER_NAME}
     volumes:
@@ -53,12 +56,8 @@ services:
       - wordpress
       - database
     image: wordpress:cli
-    env_file: .env
     environment:
-      WORDPRESS_DB_HOST: database:3306
-      WORDPRESS_DB_NAME: ${DATABASE_NAME}
-      WORDPRESS_DB_USER: ${DATABASE_USER}
-      WORDPRESS_DB_PASSWORD: ${DATABASE_PASSWORD}
+      <<: *wordpress-db-env
       WORDPRESS_PATH: /var/www/html
     volumes:
       - wordpress:/var/www/html
@@ -69,11 +68,8 @@ services:
     depends_on:
       - database
     image: mysql:8.4.7
-    env_file: .env
     environment:
-      MYSQL_DATABASE: ${DATABASE_NAME}
-      MYSQL_USER: ${DATABASE_USER}
-      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+      <<: *mysql-app-env
       DB_BACKUP_MAX_FILES: ${DATABASE_BACKUP_MAX_FILES:-3}
       DB_BACKUP_INITIAL_DELAY: ${DATABASE_BACKUP_INITIAL_DELAY:-60}
       DB_BACKUP_INTERVAL: ${DATABASE_BACKUP_INTERVAL:-3600}
