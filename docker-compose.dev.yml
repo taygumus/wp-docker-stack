@@ -19,13 +19,11 @@ services:
     volumes:
       - ./src:/var/www/html/wp-content
       - ./scripts:/scripts:ro
-    entrypoint: ["/scripts/wp-init/entrypoint.sh"]
 
   db-backup:
     volumes:
       - ./db/backups:/backups
       - ./scripts:/scripts:ro
-    entrypoint: ["/scripts/db-backup/entrypoint.sh"]
 
   wp-cli:
     depends_on:

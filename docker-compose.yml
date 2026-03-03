@@ -61,6 +61,7 @@ services:
       WORDPRESS_PATH: /var/www/html
     volumes:
       - wordpress:/var/www/html
+    entrypoint: ["/scripts/wp-init/entrypoint.sh"]
     networks:
       - internal
 
@@ -70,11 +71,12 @@ services:
     image: mysql:8.4.7
     environment:
       <<: *mysql-app-env
-      DB_BACKUP_MAX_FILES: ${DATABASE_BACKUP_MAX_FILES:-3}
-      DB_BACKUP_INITIAL_DELAY: ${DATABASE_BACKUP_INITIAL_DELAY:-60}
-      DB_BACKUP_INTERVAL: ${DATABASE_BACKUP_INTERVAL:-3600}
+      DB_BACKUP_MAX_FILES: ${DATABASE_BACKUP_MAX_FILES}
+      DB_BACKUP_INITIAL_DELAY: ${DATABASE_BACKUP_INITIAL_DELAY}
+      DB_BACKUP_INTERVAL: ${DATABASE_BACKUP_INTERVAL}
     tmpfs:
       - /var/lib/mysql
+    entrypoint: ["/scripts/db-backup/entrypoint.sh"]
     networks:
       - internal
 
