@@ -45,7 +45,7 @@ services:
     image: nginx:1.29.2-alpine
     restart: unless-stopped
     environment:
-      - SERVER_NAME=${SERVER_NAME}
+      SERVER_NAME: ${SERVER_NAME}
     volumes:
       - wordpress:/var/www/html
     networks:
@@ -59,6 +59,9 @@ services:
     environment:
       <<: *wordpress-db-env
       WORDPRESS_PATH: /var/www/html
+      SITE_URL: ${SITE_URL}
+      SKIP_WP_INIT: ${SKIP_WP_INIT}
+      SKIP_COLUMNS: ${SKIP_COLUMNS}
     volumes:
       - wordpress:/var/www/html
     entrypoint: ["/scripts/wp-init/entrypoint.sh"]

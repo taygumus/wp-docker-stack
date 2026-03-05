@@ -7,7 +7,10 @@ set -e
 . /scripts/wp-cli/check-wp-installed.sh
 . /scripts/db-common/wait-for-db.sh
 
-check_required_vars "CURRENT_SITE_URL SITE_URL"
+REQUIRED_VARS="WORDPRESS_DB_HOST WORDPRESS_DB_NAME WORDPRESS_DB_USER WORDPRESS_DB_PASSWORD \
+  WORDPRESS_PATH CURRENT_SITE_URL SITE_URL"
+
+check_required_vars "$REQUIRED_VARS"
 
 check_wp_path
 check_wp_cli
@@ -16,7 +19,7 @@ check_wp_cli
 wait_for_db
 check_wp_installed || exit 0
 
-echo "Starting site URL update: ${CURRENT_SITE_URL} → ${SITE_URL}"
+echo "Starting site URL update: ${CURRENT_SITE_URL} -> ${SITE_URL}"
 
 SKIP_COLUMNS_FLAG=""
 if [ -n "$SKIP_COLUMNS" ]; then
@@ -29,7 +32,7 @@ fi
 
 # shellcheck disable=SC2086
 if wp search-replace "$CURRENT_SITE_URL" "$SITE_URL" \
-  $SKIP_COLUMNS_FLAG \
+  ${SKIP_COLUMNS_FLAG} \
   --all-tables \
   --precise \
   --allow-root; then
