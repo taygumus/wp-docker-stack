@@ -58,10 +58,10 @@ services:
     image: wordpress:cli
     environment:
       <<: *wordpress-db-env
-      WORDPRESS_PATH: /var/www/html
       SITE_URL: ${SITE_URL}
-      SKIP_WP_INIT: ${SKIP_WP_INIT}
       SKIP_COLUMNS: ${SKIP_COLUMNS}
+      SKIP_WP_INIT: ${SKIP_WP_INIT}
+      WORDPRESS_PATH: /var/www/html
     volumes:
       - wordpress:/var/www/html
     entrypoint: ["/scripts/wp-init/entrypoint.sh"]
