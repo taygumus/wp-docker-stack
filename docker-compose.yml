@@ -58,7 +58,7 @@ services:
     depends_on:
       - wordpress
       - database
-    image: wordpress:cli
+    image: wordpress:cli-2.10.0
     environment:
       <<: *wordpress-db-env
       SITE_URL: ${SITE_URL}
