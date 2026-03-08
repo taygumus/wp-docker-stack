@@ -4,7 +4,7 @@ set -e
 . /scripts/utils/check-required-vars.sh
 . /scripts/db-common/create-db-client-config.sh
 
-FILE="$1"
+FILE="$(basename "$1")"
 
 if [ -z "$FILE" ]; then
   echo "Error: no SQL file provided" >&2
