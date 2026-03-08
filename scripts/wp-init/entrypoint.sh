@@ -1,6 +1,8 @@
 #!/bin/sh
 set -e
 
+SKIP_WP_INIT="${SKIP_WP_INIT:-false}"
+
 if [ "${SKIP_WP_INIT}" = "true" ]; then
   echo "WP initialization skipped"
   exit 0

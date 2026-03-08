@@ -1,4 +1,6 @@
 x-mysql-app-env: &mysql-app-env
+  MYSQL_HOST: database
+  MYSQL_PORT: "3306"
   MYSQL_DATABASE: ${DATABASE_NAME}
   MYSQL_USER: ${DATABASE_USER}
   MYSQL_PASSWORD: ${DATABASE_PASSWORD}
@@ -8,6 +10,7 @@ x-wordpress-db-env: &wordpress-db-env
   WORDPRESS_DB_NAME: ${DATABASE_NAME}
   WORDPRESS_DB_USER: ${DATABASE_USER}
   WORDPRESS_DB_PASSWORD: ${DATABASE_PASSWORD}
+  WORDPRESS_PATH: /var/www/html
 
 services:
   database:
@@ -61,7 +64,6 @@ services:
       SITE_URL: ${SITE_URL}
       SKIP_COLUMNS: ${SKIP_COLUMNS}
       SKIP_WP_INIT: ${SKIP_WP_INIT}
-      WORDPRESS_PATH: /var/www/html
     volumes:
       - wordpress:/var/www/html
     entrypoint: ["/scripts/wp-init/entrypoint.sh"]
@@ -74,9 +76,10 @@ services:
     image: mysql:8.4.7
     environment:
       <<: *mysql-app-env
-      DB_BACKUP_MAX_FILES: ${DATABASE_BACKUP_MAX_FILES}
       DB_BACKUP_INITIAL_DELAY: ${DATABASE_BACKUP_INITIAL_DELAY}
       DB_BACKUP_INTERVAL: ${DATABASE_BACKUP_INTERVAL}
+      DB_BACKUP_MAX_FILES: ${DATABASE_BACKUP_MAX_FILES}
+      SKIP_DB_BACKUP: ${SKIP_DB_BACKUP}
     tmpfs:
       - /var/lib/mysql
     entrypoint: ["/scripts/db-backup/entrypoint.sh"]

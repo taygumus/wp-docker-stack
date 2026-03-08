@@ -1,3 +1,17 @@
+x-mysql-app-env: &mysql-app-env
+  MYSQL_HOST: database
+  MYSQL_PORT: "3306"
+  MYSQL_DATABASE: ${DATABASE_NAME}
+  MYSQL_USER: ${DATABASE_USER}
+  MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+
+x-wordpress-db-env: &wordpress-db-env
+  WORDPRESS_DB_HOST: database:3306
+  WORDPRESS_DB_NAME: ${DATABASE_NAME}
+  WORDPRESS_DB_USER: ${DATABASE_USER}
+  WORDPRESS_DB_PASSWORD: ${DATABASE_PASSWORD}
+  WORDPRESS_PATH: /var/www/html
+
 services:
   database:
     volumes:
@@ -31,11 +45,8 @@ services:
       - database
     image: wordpress:cli
     environment:
-      WORDPRESS_DB_HOST: database:3306
-      WORDPRESS_DB_NAME: ${DATABASE_NAME}
-      WORDPRESS_DB_USER: ${DATABASE_USER}
-      WORDPRESS_DB_PASSWORD: ${DATABASE_PASSWORD}
-      WORDPRESS_PATH: /var/www/html
+      <<: *wordpress-db-env
+      SITE_URL: ${SITE_URL}
     volumes:
       - ./src:/var/www/html/wp-content
       - ./scripts:/scripts:ro
@@ -49,10 +60,7 @@ services:
       - database
     image: mysql:8.4.7
     environment:
-      MYSQL_DATABASE: ${DATABASE_NAME}
-      MYSQL_USER: ${DATABASE_USER}
-      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD}
+      <<: *mysql-app-env
     tmpfs:
       - /var/lib/mysql
     volumes:
