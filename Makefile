@@ -26,7 +26,7 @@ db-backup:
 	@$(COMPOSE_DEV) exec -T db-cli sh /scripts/db-backup/run-db-backup-once.sh
 
 db-restore:
-	@$(COMPOSE_DEV) exec -T db-cli sh -c "/scripts/db-cli/run-db-restore.sh '$(SQLFILE)'"
+	@$(COMPOSE_DEV) exec -T db-cli sh -c "/scripts/db-cli/run-db-restore.sh '$(SQL_FILE)'"
 
 # --------------------------------------------------
 # Production targets
