@@ -164,7 +164,7 @@ The `Makefile` provides a stable, minimal interface for common operations:
 
 - `make db-backup`: Execute a one-off database backup.
 
-- `make db-restore SQLFILE=x.sql`: Restore a specific dump from the `db/` directory.
+- `make db-restore SQL_FILE=x.sql`: Restore a specific dump from the `db/init` directory.
 
 ## Architecture & Workflow
 

@@ -1,7 +1,9 @@
 #!/bin/sh
 set -e
 
-if [ "${SKIP_DB_BACKUP}" = "true" ]; then
+SKIP_DB_BACKUP="${SKIP_DB_BACKUP:-false}"
+
+if [ "$SKIP_DB_BACKUP" = "true" ]; then
   echo "DB backup skipped"
   exit 0
 fi
