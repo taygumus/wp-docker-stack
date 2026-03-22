@@ -28,9 +28,9 @@ The project supports both development and production profiles, with script-drive
 
 ## Reading Guide
 
-- **I want to run it quickly:** Start from [Development Quick Start](#development-quick-start).
-- **I want to deploy in production:** Continue with [Production Quick Start](#production-quick-start).
-- **I want to understand internals:** Jump to [Architecture & Workflow](#architecture--workflow).
+- **Quick local startup:** Start from [Development Quick Start](#development-quick-start).
+- **Production deployment:** Continue with [Production Quick Start](#production-quick-start).
+- **Architecture deep dive:** Jump to [Architecture & Workflow](#architecture--workflow).
 
 ## Typical Use Cases
 
