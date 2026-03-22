@@ -235,44 +235,22 @@ flowchart LR
 Solid arrows show runtime traffic and data dependencies. Dashed arrows show optional or operator-driven interactions.
 
 ```mermaid
-flowchart LR
+flowchart TB
     Visitor((Visitor))
     Operator((Operator))
-    Proxy["External reverse proxy (production)"]
-    ProxyNet["External Docker network: proxy"]
+    Proxy["Reverse proxy (prod)"]
+    Nginx[Nginx]
+    WP[WordPress]
+    DB[(MySQL)]
+    V_DB[(db_data)]
+    V_WP[(wordpress)]
+    V_BKP[(backups)]
+    DevTools["Dev tools (phpMyAdmin / wp-cli / db-cli)"]
+    WP_INIT[wp-init]
+    DB_BACKUP[db-backup]
 
-    subgraph Edge["Presentation layer"]
-        direction TB
-        Nginx[Nginx]
-        PMA["phpMyAdmin (dev only)"]
-    end
-
-    subgraph App["Application layer"]
-        direction TB
-        WP[WordPress]
-    end
-
-    subgraph Data["Data layer"]
-        direction TB
-        DB[(MySQL)]
-        V_DB[(db_data volume)]
-        V_WP[(wordpress volume)]
-        V_BKP["Backups (dev bind mount / prod volume)"]
-    end
-
-    subgraph Ops["Operations plane"]
-        direction TB
-        WP_INIT[wp-init]
-        DB_BACKUP[db-backup]
-        WP_CLI["wp-cli (dev only)"]
-        DB_CLI["db-cli (dev only)"]
-    end
-
-    Visitor -. direct in development .-> Nginx
-    Visitor -->|production| Proxy --> Nginx
-    Proxy -. attached .-> ProxyNet
-    Nginx -. attached in production .-> ProxyNet
-
+    Visitor -. dev .-> Nginx
+    Visitor -->|prod via proxy network| Proxy --> Nginx
     Nginx --> WP --> DB
 
     DB --- V_DB
@@ -280,17 +258,14 @@ flowchart LR
     WP_INIT --- V_WP
     DB_BACKUP --- V_BKP
 
-    PMA -.-> DB
-    WP_CLI -.-> WP
-    DB_CLI -.-> DB
-    WP_INIT --> DB
-    DB_BACKUP --> DB
-
-    Operator -.-> PMA
-    Operator -.-> WP_CLI
-    Operator -.-> DB_CLI
+    DevTools -.-> WP
+    DevTools -.-> DB
+    Operator -.-> DevTools
     Operator -.-> WP_INIT
     Operator -.-> DB_BACKUP
+
+    WP_INIT --> DB
+    DB_BACKUP --> DB
 ```
 
 ### Service responsibilities
