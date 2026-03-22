@@ -55,7 +55,7 @@ cd wp-docker-stack
 cp .env.example .env
 ```
 
-### Start
+### Start development stack
 
 ```sh
 make up
@@ -66,7 +66,7 @@ make up
 - **WordPress:** `http://<SERVER_NAME>:<HTTP_PORT>` (default: `http://localhost:8000`)
 - **phpMyAdmin (optional):** `http://localhost:<PHPMYADMIN_PORT>` (default: `8001`)
 
-### Stop
+### Stop development stack
 
 ```sh
 make down
@@ -92,13 +92,13 @@ docker network create proxy
 
 If the network already exists, Docker reports it and you can continue.
 
-### Start
+### Start production stack
 
 ```sh
 make up-prod
 ```
 
-### Observe logs
+### View production logs
 
 ```sh
 make logs-prod
@@ -108,9 +108,9 @@ make logs-prod
 
 Route `SERVER_NAME` to `wp-docker-stack-nginx:80` on Docker network `proxy`.
 
-If you want a ready-to-use edge stack with Nginx and Certbot, see [`taygumus/nginx-docker-reverse-proxy`](https://github.com/taygumus/nginx-docker-reverse-proxy).
+If you want a ready-to-use edge stack with Nginx and Certbot, see [Nginx Docker Reverse Proxy](https://github.com/taygumus/nginx-docker-reverse-proxy).
 
-### Stop
+### Stop production stack
 
 ```sh
 make down-prod
@@ -247,8 +247,8 @@ flowchart TB
         DB[(MySQL)]
         V_DB[(db_data volume)]
         V_WP[(wordpress volume)]
-        V_BKP_DEV["./db/backups bind mount - dev"]
-        V_BKP_PROD[(db_backups volume)]
+        V_BKP_DEV["./db/backups bind mount - development"]
+        V_BKP_PROD[(db_backups volume - production)]
     end
 
     subgraph Ops [Operations Plane]
@@ -267,8 +267,9 @@ flowchart TB
 
     DB --- V_DB
     WP --- V_WP
-    DB_BACKUP --- V_BKP_DEV
-    DB_BACKUP --- V_BKP_PROD
+    WP_INIT --- V_WP
+    DB_BACKUP -. development .- V_BKP_DEV
+    DB_BACKUP -. production .- V_BKP_PROD
 
     PMA -.-> DB
     WP_INIT --> WP
@@ -308,11 +309,11 @@ flowchart TB
 
 The GitHub Actions workflow (`.github/workflows/ci-lint.yml`) validates:
 
-- shell scripts with `shellcheck`
-- compose files with `yamllint`
-- compose resolution for base + development profile via `docker compose config`
-- makefiles with `checkmake`
-- markdown files with `markdownlint`
+- Shell scripts with `shellcheck`
+- Compose files with `yamllint`
+- Compose resolution for base + development profile via `docker compose config`
+- Makefiles with `checkmake`
+- Markdown files with `markdownlint`
 
 ## Extensibility
 
