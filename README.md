@@ -232,7 +232,7 @@ flowchart LR
 
 ### System diagram
 
-Solid arrows show runtime traffic/dependencies. Dashed arrows show operator and tooling interactions.
+Solid arrows show runtime traffic and data dependencies. Dashed arrows show optional or operator-driven interactions.
 
 ```mermaid
 flowchart LR
@@ -269,9 +269,9 @@ flowchart LR
     end
 
     Visitor -. direct in development .-> Nginx
-    Visitor --> Proxy --> Nginx
-    Proxy --- ProxyNet
-    Nginx --- ProxyNet
+    Visitor -->|production| Proxy --> Nginx
+    Proxy -. attached .-> ProxyNet
+    Nginx -. attached in production .-> ProxyNet
 
     Nginx --> WP --> DB
 
@@ -283,7 +283,6 @@ flowchart LR
     PMA -.-> DB
     WP_CLI -.-> WP
     DB_CLI -.-> DB
-    WP_INIT --> WP
     WP_INIT --> DB
     DB_BACKUP --> DB
 
