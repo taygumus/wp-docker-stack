@@ -106,7 +106,15 @@ make logs-prod
 
 ### Route traffic
 
-Route `SERVER_NAME` to `wp-docker-stack-nginx:80` on Docker network `proxy`.
+In your reverse proxy vhost for `SERVER_NAME`, forward traffic to the upstream alias `wp-docker-stack-nginx` on port `80` over Docker network `proxy`.
+
+Example:
+
+```nginx
+location / {
+    proxy_pass http://wp-docker-stack-nginx:80;
+}
+```
 
 If you want a ready-to-use edge stack with Nginx and Certbot, see [Nginx Docker Reverse Proxy](https://github.com/taygumus/nginx-docker-reverse-proxy).
 
