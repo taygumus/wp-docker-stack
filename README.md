@@ -238,36 +238,34 @@ Solid arrows show runtime traffic/dependencies. Dashed arrows show operator and 
 flowchart LR
     Visitor((Visitor))
     Operator((Operator))
-
-    Proxy["External reverse proxy - production"]
+    Proxy["External reverse proxy (production)"]
     ProxyNet["External Docker network: proxy"]
 
-    subgraph Runtime [Runtime services - all profiles]
+    subgraph Edge["Presentation layer"]
         direction TB
         Nginx[Nginx]
-        WP[WordPress]
-        DB[(MySQL)]
+        PMA["phpMyAdmin (dev only)"]
     end
 
-    subgraph DevTools [Development-only services]
+    subgraph App["Application layer"]
         direction TB
-        PMA[phpMyAdmin]
-        WP_CLI[wp-cli]
-        DB_CLI[db-cli]
+        WP[WordPress]
     end
 
-    subgraph Ops [Operational sidecars]
+    subgraph Data["Data layer"]
+        direction TB
+        DB[(MySQL)]
+        V_DB[(db_data volume)]
+        V_WP[(wordpress volume)]
+        V_BKP["Backups (dev bind mount / prod volume)"]
+    end
+
+    subgraph Ops["Operations plane"]
         direction TB
         WP_INIT[wp-init]
         DB_BACKUP[db-backup]
-    end
-
-    subgraph Storage [Persistence]
-        direction TB
-        V_DB[(db_data volume)]
-        V_WP[(wordpress volume)]
-        V_BKP_DEV["./db/backups bind mount - development"]
-        V_BKP_PROD[(db_backups volume - production)]
+        WP_CLI["wp-cli (dev only)"]
+        DB_CLI["db-cli (dev only)"]
     end
 
     Visitor -. direct in development .-> Nginx
@@ -280,22 +278,20 @@ flowchart LR
     DB --- V_DB
     WP --- V_WP
     WP_INIT --- V_WP
-    DB_BACKUP -. development .- V_BKP_DEV
-    DB_BACKUP -. production .- V_BKP_PROD
+    DB_BACKUP --- V_BKP
+
+    PMA -.-> DB
+    WP_CLI -.-> WP
+    DB_CLI -.-> DB
+    WP_INIT --> WP
+    WP_INIT --> DB
+    DB_BACKUP --> DB
 
     Operator -.-> PMA
     Operator -.-> WP_CLI
     Operator -.-> DB_CLI
     Operator -.-> WP_INIT
     Operator -.-> DB_BACKUP
-
-    PMA -.-> DB
-    WP_CLI -.-> WP
-    DB_CLI -.-> DB
-
-    WP_INIT --> WP
-    WP_INIT --> DB
-    DB_BACKUP --> DB
 ```
 
 ### Service responsibilities
