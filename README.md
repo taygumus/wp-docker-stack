@@ -124,12 +124,35 @@ make up-prod
 
 In your external proxy, route `SERVER_NAME` to `wp-docker-stack-nginx:80` on Docker network `proxy`.
 
+For a production-ready edge stack with Nginx + Certbot, see [`taygumus/nginx-docker-reverse-proxy`](https://github.com/taygumus/nginx-docker-reverse-proxy).
+
 ### 5) Observe and stop
 
 ```sh
 make logs-prod
 make down-prod
 ```
+
+### 6) Minimum server sizing (production profile)
+
+Estimated baseline for small real-world deployments:
+
+| Scenario | vCPU | RAM | Notes |
+| :--- | :--- | :--- | :--- |
+| **Minimum (small traffic)** | 1 | 1 GB | Works for low traffic and small databases; monitor memory closely during imports/backups. |
+| **Recommended (stable production)** | 2 | 2 GB | Better headroom for MySQL, plugin/theme activity, and concurrent requests. |
+| **Comfortable growth** | 2-4 | 4 GB+ | Better resilience for heavier plugins, cache warmups, and traffic spikes. |
+
+Practical estimate at idle/light load:
+
+- MySQL: ~`350-600 MB` (can increase with data and query complexity)
+- WordPress PHP-FPM: ~`80-200 MB`
+- Nginx + sidecars (`db-backup`, `wp-init` when active): ~`40-120 MB`
+- Suggested safety headroom: at least `20-30%` free RAM
+
+If your server has only `1 GB`, start with conservative limits in `.env` and monitor container memory before scaling traffic.
+
+To validate your real footprint on your production host, run `docker stats --no-stream` after `make up-prod`.
 
 ## Configuration
 
@@ -227,12 +250,12 @@ flowchart TB
     Visitor((Visitor))
     Operator((Operator))
 
-    Proxy[External Reverse Proxy (prod)]
-    ProxyNet[[proxy network (external, prod)]]
+    Proxy["External Reverse Proxy (prod)"]
+    ProxyNet["proxy network (external, prod)"]
 
     subgraph Edge [Presentation Layer]
         Nginx[Nginx]
-        PMA[phpMyAdmin (dev only)]
+        PMA["phpMyAdmin (dev only)"]
     end
 
     subgraph App [Application Layer]
@@ -243,15 +266,15 @@ flowchart TB
         DB[(MySQL)]
         V_DB[(db_data volume)]
         V_WP[(wordpress volume)]
-        V_BKP_DEV[./db/backups (dev bind mount)]
+        V_BKP_DEV["./db/backups (dev bind mount)"]
         V_BKP_PROD[(db_backups volume)]
     end
 
     subgraph Ops [Operations Plane]
         WP_INIT[wp-init]
         DB_BACKUP[db-backup]
-        WP_CLI[wp-cli (dev only)]
-        DB_CLI[db-cli (dev only)]
+        WP_CLI["wp-cli (dev only)"]
+        DB_CLI["db-cli (dev only)"]
     end
 
     Visitor -. dev direct access .-> Nginx
@@ -298,15 +321,19 @@ flowchart TB
 Key architectural choices:
 
 - **Explicit automation over hidden entrypoint logic**
+
   Initialization, migration, and backup behavior is script-driven and auditable.
 
 - **Environment-specific layering**
+
   A common base runtime is extended through dedicated development and production Compose profiles.
 
 - **Operational sidecars for lifecycle tasks**
+
   URL sync, backup, and administrative operations are isolated from the main request-serving path.
 
 - **Production hardening defaults**
+
   Production profile enables container log rotation, resource limits, `no-new-privileges`, and immutable-friendly service wiring through an external proxy network.
 
 ## Quality Gates and CI
