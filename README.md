@@ -35,7 +35,7 @@ The project supports both development and production profiles, with script-drive
 ## Typical Use Cases
 
 1. **Fresh WordPress setup:** Start a new instance with `make up` (development) or `make up-prod` (production).
-2. **Import an existing WordPress project (development):** Place a SQL dump in `db/init/`, copy `wp-content` assets into `src/`, and use `make db-restore SQL_FILE=<file.sql>` when manual restore is needed.
+2. **Import an existing WordPress project:** Place a SQL dump in `db/init/`, copy `wp-content` assets into `src/`, and use `make db-restore SQL_FILE=<file.sql>` when manual restore is needed.
 3. **Environment migration and URL synchronization:** `wp-init` reads the current URL and runs a controlled `wp search-replace` toward `SITE_URL`.
 4. **Continuous database safety:** `db-backup` runs periodic snapshots and applies FIFO retention.
 
