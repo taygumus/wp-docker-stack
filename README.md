@@ -226,8 +226,8 @@ The stack follows a three-tier runtime model with a dedicated operations plane.
 
 ```mermaid
 flowchart LR
-    Base["docker-compose.yml: base runtime"] --> Dev["docker-compose.dev.yml: development profile"]
-    Base --> Prod["docker-compose.prod.yml: production profile"]
+    Base["docker-compose.yml (base)"] --> Dev["docker-compose.dev.yml (dev)"]
+    Base --> Prod["docker-compose.prod.yml (prod)"]
 ```
 
 ### System diagram
