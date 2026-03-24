@@ -47,10 +47,12 @@ The project supports both development and production profiles, with script-drive
 - Docker Compose
 - GNU Make
 
+Commands in this README assume a POSIX-like shell. On Windows, use Git Bash, WSL, or an equivalent environment that provides `make` and `cp`.
+
 ### Setup
 
 ```sh
-git clone <repository-url>
+git clone https://github.com/taygumus/wp-docker-stack.git
 cd wp-docker-stack
 cp .env.example .env
 ```
@@ -81,6 +83,7 @@ The production profile is designed to run behind an external reverse proxy.
 ### Prepare environment variables
 
 - Copy `.env.example` to `.env` (if not already done).
+- Replace the example database credentials before any non-local deployment. Do not use the default `.env.example` secrets in production.
 - Set `SERVER_NAME` to your public hostname.
 - Set `SITE_URL` to `https://<SERVER_NAME>`.
 
@@ -174,7 +177,7 @@ All behavior is configured through `.env` values.
 Development profile also mounts:
 
 - `./src` into `wp-content`
-- `./db/init` into MySQL init directory
+- `./db/init` into MySQL init directory (processed automatically only when the database volume is initialized for the first time)
 - `./db/backups` for host-visible backup files
 
 ### Production settings (`docker-compose.prod.yml`)
@@ -200,8 +203,8 @@ Production profile uses named volume `db_backups` and external network `proxy`.
 | :--- | :--- |
 | `make up` | Build and start development services (`docker-compose.yml` + `docker-compose.dev.yml`). |
 | `make down` | Stop development services. |
-| `make clean` | Stop development services and remove volumes. |
-| `make reset` | Full reset (`clean` + `up`). |
+| `make clean` | Stop development services and remove volumes (destructive: deletes database and WordPress data). |
+| `make reset` | Full reset (`clean` + `up`; destructive for persistent data). |
 | `make logs` | Stream development logs. |
 
 ### Production lifecycle
