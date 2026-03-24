@@ -121,7 +121,7 @@ location / {
 }
 ```
 
-If you want a ready-to-use Nginx + Certbot edge setup, see [Nginx Docker Reverse Proxy](https://github.com/taygumus/nginx-docker-reverse-proxy).
+For a ready-to-use Nginx + Certbot edge setup, see [Nginx Docker Reverse Proxy](https://github.com/taygumus/nginx-docker-reverse-proxy).
 
 ### Stop production stack
 
