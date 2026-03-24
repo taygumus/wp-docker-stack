@@ -22,7 +22,7 @@
 
 ## Overview
 
-This repository provides a Docker Compose-based WordPress stack focused on repeatability, clear separation of concerns, and explicit operational workflows.
+This repository provides a Docker Compose-based WordPress stack for both local development and production deployments, with a shared base, clear separation of concerns, and explicit operational workflows.
 
 The project supports both development and production profiles, with script-driven automation for initialization, URL synchronization, and database backups.
 
@@ -35,9 +35,9 @@ The project supports both development and production profiles, with script-drive
 ## Typical Use Cases
 
 1. **Fresh WordPress setup:** Start a new instance with `make up` (development) or `make up-prod` (production).
-2. **Import an existing WordPress project:** Place a SQL dump in `db/init/`, copy `wp-content` assets into `src/`, and use `make db-restore SQL_FILE=<file.sql>` when manual restore is needed.
-3. **Environment migration and URL synchronization:** `wp-init` reads the current URL and runs a controlled `wp search-replace` toward `SITE_URL`.
-4. **Continuous database safety:** `db-backup` runs periodic snapshots and applies FIFO retention.
+2. **Import an existing WordPress project:** Place a SQL dump in `db/init/`, copy your `wp-content` assets into `src/`, and use `make db-restore SQL_FILE=<file.sql>` when you need a manual restore.
+3. **Environment migration and URL synchronization:** `wp-init` reads the current site URL and runs a controlled `wp search-replace` toward `SITE_URL`.
+4. **Continuous database safety:** `db-backup` creates periodic SQL backups and applies FIFO retention.
 
 ## Development Quick Start
 
@@ -54,6 +54,8 @@ git clone <repository-url>
 cd wp-docker-stack
 cp .env.example .env
 ```
+
+The default values in `.env.example` are suitable for a first local run.
 
 ### Start development stack
 
@@ -74,7 +76,7 @@ make down
 
 ## Production Quick Start
 
-The production profile is designed to sit behind an external reverse proxy.
+The production profile is designed to run behind an external reverse proxy.
 
 ### Prepare environment variables
 
@@ -116,7 +118,7 @@ location / {
 }
 ```
 
-If you want a ready-to-use edge stack with Nginx and Certbot, see [Nginx Docker Reverse Proxy](https://github.com/taygumus/nginx-docker-reverse-proxy).
+If you want a ready-to-use Nginx + Certbot edge setup, see [Nginx Docker Reverse Proxy](https://github.com/taygumus/nginx-docker-reverse-proxy).
 
 ### Stop production stack
 
@@ -145,7 +147,7 @@ Runtime note: production resource values are declared in `deploy.resources`. Eff
 
 ## Configuration
 
-All behavior is controlled through `.env` values.
+All behavior is configured through `.env` values.
 
 ### Shared settings (all profiles)
 
@@ -190,7 +192,7 @@ Production profile uses named volume `db_backups` and external network `proxy`.
 
 ## Operational Commands
 
-`Makefile` is the main operational interface.
+`Makefile` is the main interface for day-to-day operations.
 
 ### Development lifecycle
 
@@ -220,7 +222,7 @@ Production profile uses named volume `db_backups` and external network `proxy`.
 
 ## Architecture & Workflow
 
-The stack follows a three-tier runtime model with a dedicated operations plane.
+The stack is organized into presentation, application, data, and operations services.
 
 ### Compose layering
 
