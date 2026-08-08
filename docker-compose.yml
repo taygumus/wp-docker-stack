@@ -33,7 +33,7 @@ services:
   wordpress:
     depends_on:
       - database
-    image: wordpress:6.9.0-fpm-alpine
+    image: wordpress:7.0.2-fpm-alpine
     restart: unless-stopped
     environment:
       <<: *wordpress-db-env
