@@ -242,60 +242,37 @@ Solid arrows show runtime traffic and data dependencies. Dashed arrows show opti
 ```mermaid
 flowchart LR
     Visitor((Visitor))
-    Operator((Operator))
     Proxy["External reverse proxy"]
-    ProxyNet["Network: proxy"]
+    Nginx["Nginx"]
+    WP["WordPress"]
+    DB[("MySQL")]
 
-    subgraph Edge["Presentation layer"]
-        direction TB
-        Nginx[Nginx]
-        PMA["phpMyAdmin (dev only)"]
-    end
+    DevTools["`Development tools
+wp-cli · db-cli · pma`"]
+    OpsTools["`Operations services
+wp-init · db-backup`"]
+    Operator((Operator))
 
-    subgraph App["Application layer"]
-        direction TB
-        WP[WordPress]
-    end
+    WPVolume[("WordPress volume")]
+    DBVolume[("Database volume")]
+    Backups["`Backups
+(dev bind / prod volume)`"]
 
-    subgraph Data["Data layer"]
-        direction TB
-        DB[(MySQL)]
-        V_DB[(db_data volume)]
-        V_WP[(wordpress volume)]
-        V_BKP["Backups (dev bind / prod volume)"]
-    end
+    Visitor -->|production| Proxy --> Nginx --> WP --> DB
+    Visitor -.->|development| Nginx
 
-    subgraph Ops["Operations plane"]
-        direction TB
-        WP_INIT[wp-init]
-        DB_BACKUP[db-backup]
-        WP_CLI["wp-cli (dev only)"]
-        DB_CLI["db-cli (dev only)"]
-    end
+    Operator -.-> DevTools
+    Operator -.-> OpsTools
 
-    Visitor -. dev .-> Nginx
-    Visitor -->|production| Proxy --> Nginx
-    Proxy -. attached .-> ProxyNet
-    Nginx -. attached in prod .-> ProxyNet
+    DevTools -.-> WP
+    DevTools -.-> DB
 
-    Nginx --> WP --> DB
+    OpsTools -.-> WP
+    OpsTools -.-> DB
+    OpsTools -.-> Backups
 
-    DB --- V_DB
-    WP --- V_WP
-    WP_INIT --- V_WP
-    DB_BACKUP --- V_BKP
-
-    PMA -.-> DB
-    WP_CLI -.-> WP
-    DB_CLI -.-> DB
-    WP_INIT --> DB
-    DB_BACKUP --> DB
-
-    Operator -.-> PMA
-    Operator -.-> WP_CLI
-    Operator -.-> DB_CLI
-    Operator -.-> WP_INIT
-    Operator -.-> DB_BACKUP
+    WP --- WPVolume
+    DB --- DBVolume
 ```
 
 ### Service responsibilities
